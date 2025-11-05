@@ -5,64 +5,66 @@ Next.js 14 collaborative development starter with full AI integration through Cl
 ## Quick Start (New Team Member)
 
 ### Prerequisites
-- **Cursor IDE** installed
+
+- **Cursor IDE** installed (or any IDE with Claude Code support)
 - **Node.js 18+** installed
-- Access to **GitHub repo, Vercel, and Supabase**
+- Access to **GitHub repo and Supabase** (Vercel optional)
 
 ### Setup Steps
 
 #### 1. **Set Up MCP Servers (5 minutes)**
 
-   MCP servers enable Claude Code to interact with GitHub, Vercel, and Supabase using natural language.
+MCP servers enable Claude Code to interact with GitHub, Vercel, and Supabase using natural language.
 
-   ```bash
-   ./setup-mcp.sh
-   ```
+```bash
+./setup-mcp.sh
+```
 
-   You'll be prompted for three API tokens:
-   - GitHub Personal Access Token
-   - Supabase Project Reference ID
-   - Vercel API Token
+You'll be prompted for two API credentials:
 
-   **📖 Detailed instructions:** See `MCP_SETUP.md`
+- GitHub Personal Access Token
+- Supabase Project Reference ID
+
+**📖 Detailed instructions:** See `MCP_SETUP.md`
 
 #### 2. **Set up environment variables**
 
-   ```bash
-   cp .env.local.example .env.local
-   ```
+```bash
+cp .env.local.example .env.local
+```
 
-   Then edit `.env.local` with your Supabase credentials (get from team lead)
+Then edit `.env.local` with your Supabase credentials (get from team lead)
 
 #### 3. **Install dependencies**
 
-   ```bash
-   npm install
-   ```
+```bash
+npm install
+```
 
 #### 4. **Start development server**
 
-   ```bash
-   npm run dev
-   ```
+```bash
+npm run dev
+```
 
 #### 5. **Open your browser**
 
-   Navigate to http://localhost:3000 - you should see the app running!
+Navigate to http://localhost:3000 - you should see the app running!
 
 #### 6. **Test Claude Code + MCP**
 
-   In Cursor, try asking Claude:
-   - "Show me all open pull requests"
-   - "What's the latest Vercel deployment status?"
-   - "Show me the Supabase database schema"
+In Cursor, try asking Claude:
+
+- "Show me all open pull requests"
+- "Show me the Supabase database schema"
+- "What's on the employee directory page?"
 
 ## Important Links
 
 - **GitHub Repo:** https://github.com/tcpalm-r/ari-jorge-collab
 - **GitHub Actions (CI):** https://github.com/tcpalm-r/ari-jorge-collab/actions
-- **Production Site:** https://ari-jorge-collab.vercel.app (or your Vercel URL)
-- **Supabase Dashboard:** https://app.supabase.com (Project: Ari and Jorge starter)
+- **Production Site:** https://ari-jorge-collab.vercel.app
+- **Supabase Dashboard:** https://app.supabase.com/project/kjfizpagyleefuucsdbu
 - **Vercel Dashboard:** https://vercel.com/dashboard
 
 ## Repository Status
@@ -73,6 +75,12 @@ Next.js 14 collaborative development starter with full AI integration through Cl
   - All changes require Pull Requests with 1 approval
   - CI checks must pass before merging
   - Protection enforced for all team members (including admins)
+- **Pre-commit Hooks:** ✅ Automatic code quality checks
+  - Prettier auto-formats code (spacing, quotes, etc.)
+  - ESLint auto-fixes code style issues
+  - TypeScript type checking catches errors early
+  - Prevents broken code from reaching GitHub
+  - No manual intervention needed - fixes happen automatically!
 
 ## Key Commands
 
@@ -86,6 +94,7 @@ npm run type-check   # Check TypeScript errors
 ## Workflow & Documentation
 
 **For Developers:**
+
 - 📘 **`CLAUDE.md`** - Complete workflow guide, coding standards, and best practices
 - 🔧 **`MCP_SETUP.md`** - Detailed MCP server setup and troubleshooting
 
@@ -103,24 +112,42 @@ npm run type-check   # Check TypeScript errors
 - **Framework:** Next.js 14 with TypeScript
 - **Database:** Supabase (PostgreSQL)
 - **Hosting:** Vercel (auto-deploy from main branch)
-- **Styling:** Tailwind CSS
-- **AI Integration:** Claude Code with MCP servers for GitHub, Vercel, and Supabase
+- **Styling:** Tailwind CSS (with custom dark mode)
+- **AI Integration:** Claude Code with MCP servers for GitHub and Supabase
+
+## Current Features
+
+### Employee Directory
+
+- Dark mode UI with Supabase-style design (`#1c1c1c` background, `#3ECF8E` accents)
+- Scrollable table container with fixed viewport height
+- Displays employee data from Supabase `employees` table
+- Responsive design with truncated text for long values
+- Real-time data fetching using Next.js 14 Server Components
+
+**Location:** `/app/page.tsx`
 
 ## MCP-Enabled Commands
 
 Once MCP is set up, you can ask Claude Code natural language questions:
 
 **GitHub:**
+
 - "Show me all open pull requests"
 - "Create a new branch called feature/my-feature"
 - "What files changed in the last commit?"
-
-**Vercel:**
-- "What's the deployment status?"
-- "Show me the latest deployment logs"
-- "List all my Vercel projects"
+- "Create a PR for this branch"
 
 **Supabase:**
+
 - "Show me the database schema"
-- "Query all users from the database"
-- "Check if authentication is working"
+- "Query the employees table"
+- "Check database connection status"
+- "What tables exist in the database?"
+
+**Vercel (Use CLI or Dashboard):**
+
+- Terminal: `vercel` - Deploy preview
+- Terminal: `vercel --prod` - Deploy to production
+- Terminal: `vercel logs` - View logs
+- Or ask Claude: "Help me check Vercel deployment status"

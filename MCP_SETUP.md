@@ -2,22 +2,22 @@
 
 ## What is MCP?
 
-Model Context Protocol (MCP) allows Claude Code to interact with external services like GitHub, Vercel, and Supabase using natural language commands.
+Model Context Protocol (MCP) allows Claude Code to interact with external services like GitHub and Supabase using natural language commands.
 
 **Instead of running technical commands, you can just ask:**
 - "Show me all open pull requests"
-- "What's the latest deployment status on Vercel?"
 - "Query the users table in Supabase"
+- "Create a new branch for my feature"
 
 ---
 
-## Quick Setup (5 Minutes)
+## Quick Setup (3 Minutes)
 
 ### Prerequisites
 
 Before you start, you'll need:
 1. **Cursor IDE** installed and open with this project
-2. **Three API tokens** (instructions below on how to get them)
+2. **Two API credentials** (instructions below on how to get them)
 
 ### Step 1: Get Your API Tokens
 
@@ -38,13 +38,6 @@ Before you start, you'll need:
 3. Click **Settings** (gear icon) → **General**
 4. Copy the **"Reference ID"** (looks like: `kjfizpagyleefuucsdbu`)
 
-#### Vercel API Token
-1. Go to: https://vercel.com/account/tokens
-2. Click **"Create Token"**
-3. Give it a name like "MCP Server"
-4. Click **"Create"**
-5. **Copy the token**
-
 ### Step 2: Run the Setup Script
 
 Open a terminal in this project directory and run:
@@ -53,7 +46,11 @@ Open a terminal in this project directory and run:
 ./setup-mcp.sh
 ```
 
-The script will prompt you for each token. Just paste them in when asked.
+The script will prompt you for:
+1. GitHub Personal Access Token
+2. Supabase Project Reference ID
+
+Just paste them in when asked.
 
 ### Step 3: Restart Cursor
 
@@ -66,29 +63,29 @@ After the script completes:
 
 Try asking Claude Code:
 - "Show me all open pull requests on GitHub"
-- "What's the current deployment status on Vercel?"
 - "Show me the database tables in Supabase"
+- "Create a new feature branch"
 
 ---
 
 ## What Gets Installed?
 
-The project includes three MCP servers:
+The project includes two MCP servers (both hosted remotely):
 
 ### 1. **GitHub MCP** (Remote)
-- Hosted by GitHub at `https://api.githubcopilot.com/mcp/`
-- Manages repositories, pull requests, issues, and workflows
-- Uses your GitHub Personal Access Token
+- **URL:** `https://api.githubcopilot.com/mcp/`
+- **Purpose:** Manages repositories, pull requests, issues, and workflows
+- **Authentication:** Your GitHub Personal Access Token
+- **Example commands:** "Show me all open PRs", "Create a feature branch"
 
 ### 2. **Supabase MCP** (Remote)
-- Hosted by Supabase at `https://mcp.supabase.com/mcp`
-- Query database, manage tables, check auth status
-- Uses your project reference ID
+- **URL:** `https://mcp.supabase.com/mcp`
+- **Purpose:** Query database, manage tables, check auth status
+- **Authentication:** Your project reference ID
+- **Example commands:** "Show database schema", "Query the employees table"
 
-### 3. **Vercel MCP** (Local)
-- Runs locally from `./mcp-servers/vercel/`
-- Check deployments, view logs, manage projects
-- Uses your Vercel API token
+### Note on Vercel
+Vercel MCP has been intentionally excluded due to security concerns (API tokens provide excessive permissions). Use the Vercel CLI (`vercel` command) or Vercel dashboard for deployment operations instead.
 
 ---
 
@@ -98,7 +95,6 @@ Your MCP setup consists of:
 
 - **`.cursor/mcp.json`** - MCP server configuration (committed to git)
 - **`.cursor/.env.mcp`** - Your API tokens (NOT committed, git-ignored)
-- **`mcp-servers/vercel/`** - Vercel MCP server code (committed to git)
 - **`setup-mcp.sh`** - Easy setup script (committed to git)
 
 Only your tokens are kept private. Everything else is shared with the team.
@@ -112,13 +108,13 @@ Only your tokens are kept private. Everything else is shared with the team.
 1. Make sure you ran `./setup-mcp.sh` successfully
 2. Check that `.cursor/.env.mcp` exists with your tokens
 3. Restart Cursor completely (Cmd+Q, then reopen)
-4. Try running: `cd mcp-servers/vercel && npm install`
 
-### "GitHub/Vercel/Supabase not responding"
+### "GitHub/Supabase commands not working"
 
-- Verify your API tokens are correct
-- Check token hasn't expired (GitHub tokens can expire)
-- Ensure you have the right permissions/scopes
+- Verify your API credentials are correct in `.cursor/.env.mcp`
+- Check GitHub token hasn't expired (tokens can expire)
+- Ensure GitHub token has the right scopes: `repo`, `workflow`, `read:org`
+- Verify Supabase project reference ID matches your project
 
 ### "Permission denied" when running setup script
 
@@ -161,9 +157,10 @@ Each person uses their own API tokens - never share tokens between team members.
 If you prefer to configure manually without the script:
 
 1. Copy `.cursor/.env.mcp.example` to `.cursor/.env.mcp`
-2. Edit `.cursor/.env.mcp` and add your three tokens
-3. Run `cd mcp-servers/vercel && npm install`
-4. Restart Cursor
+2. Edit `.cursor/.env.mcp` and add your two credentials:
+   - `GITHUB_PERSONAL_ACCESS_TOKEN`
+   - `SUPABASE_PROJECT_REF`
+3. Restart Cursor
 
 ---
 
