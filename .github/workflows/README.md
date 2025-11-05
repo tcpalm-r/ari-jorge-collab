@@ -8,12 +8,18 @@ Every time code is pushed to `main` or a Pull Request is created, GitHub automat
 - **ESLint**: Checks code quality and style
 - **TypeScript**: Verifies all types are correct
 
-### 2. **Build** (~50 seconds)
+### 2. **Secret Scanning** (~10 seconds)
+- **Gitleaks**: Scans for accidentally committed secrets
+- Checks for API keys, passwords, tokens, private keys
+- Protects against security vulnerabilities
+- **CRITICAL**: Blocks merge if secrets are found
+
+### 3. **Build** (~50 seconds)
 - Builds the Next.js application
 - Ensures the app compiles successfully
 - Catches build errors before deployment
 
-### 3. **CI Summary** (~3 seconds)
+### 4. **CI Summary** (~3 seconds)
 - Reports overall pass/fail status
 - All checks must pass before PR can be merged
 
@@ -27,6 +33,7 @@ When you create a PR, you'll see status checks at the bottom:
 
 ```
 ✅ CI / Lint & Type Check
+✅ CI / Secret Scanning
 ✅ CI / Build
 ✅ CI / CI Summary
 ```
@@ -78,6 +85,39 @@ Review the errors and fix type issues.
 
 **Or ask Claude:**
 "Fix these TypeScript errors"
+
+---
+
+### ❌ Secret Scanning Failed
+
+**Error message:** "Detected hardcoded API key" or "Potential secret found"
+
+**⚠️ CRITICAL SECURITY ISSUE ⚠️**
+
+**What this means:** You accidentally committed a real API key, password, or secret to the repository.
+
+**How to fix:**
+1. **IMMEDIATELY** revoke/regenerate the exposed secret:
+   - Supabase keys: Generate new ones in Supabase dashboard
+   - GitHub tokens: Delete and create new token
+   - Vercel tokens: Revoke and create new token
+
+2. Remove the secret from your code:
+   - Move it to `.env.local` (which is git-ignored)
+   - Never hardcode secrets in source files
+
+3. Ask Claude to help:
+   ```
+   "I accidentally committed a secret. Help me remove it and
+   fix the code to use environment variables instead."
+   ```
+
+4. **Important:** Simply deleting the secret from the current commit is NOT enough - it's still in git history. Claude can help you properly remove it.
+
+**Prevention:**
+- Always use `.env.local` for secrets
+- Double-check files before committing
+- Never hardcode API keys in code
 
 ---
 
