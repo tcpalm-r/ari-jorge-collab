@@ -1,47 +1,68 @@
-# [Project Name]
+# Ari and Jorge Starter
 
-[Brief description of what this project does]
+Next.js 14 collaborative development starter with full AI integration through Claude Code.
 
-## Quick Start
+## Quick Start (New Team Member)
 
 ### Prerequisites
-- Node.js 18+ installed
-- Claude Code installed (`npm install -g @anthropic-ai/claude-code`)
-- Cursor IDE installed
-- Access to GitHub repo, Vercel, and Supabase
+- **Cursor IDE** installed
+- **Node.js 18+** installed
+- Access to **GitHub repo, Vercel, and Supabase**
 
-### Setup with Claude Code
+### Setup Steps
 
-1. **Clone the repository**
-   ```
-   Ask Claude: "Clone this repository from [repo-url]"
-   ```
+#### 1. **Set Up MCP Servers (5 minutes)**
 
-2. **Install dependencies**
-   ```
-   Ask Claude: "Install the dependencies for this project"
+   MCP servers enable Claude Code to interact with GitHub, Vercel, and Supabase using natural language.
+
+   ```bash
+   ./setup-mcp.sh
    ```
 
-3. **Set up environment variables**
-   - Copy `.env.local.example` to `.env.local`
-   - Get the actual values from [team lead/shared password manager]
-   - Ask Claude: "Create a .env.local file with these environment variables: [paste values]"
+   You'll be prompted for three API tokens:
+   - GitHub Personal Access Token
+   - Supabase Project Reference ID
+   - Vercel API Token
 
-4. **Start development server**
-   ```
-   Ask Claude: "Start the development server"
+   **📖 Detailed instructions:** See `MCP_SETUP.md`
+
+#### 2. **Set up environment variables**
+
+   ```bash
+   cp .env.local.example .env.local
    ```
 
-5. **Open your browser**
-   - Navigate to http://localhost:3000
-   - You should see the app running!
+   Then edit `.env.local` with your Supabase credentials (get from team lead)
+
+#### 3. **Install dependencies**
+
+   ```bash
+   npm install
+   ```
+
+#### 4. **Start development server**
+
+   ```bash
+   npm run dev
+   ```
+
+#### 5. **Open your browser**
+
+   Navigate to http://localhost:3000 - you should see the app running!
+
+#### 6. **Test Claude Code + MCP**
+
+   In Cursor, try asking Claude:
+   - "Show me all open pull requests"
+   - "What's the latest Vercel deployment status?"
+   - "Show me the Supabase database schema"
 
 ## Important Links
 
-- **Production Site:** [Vercel URL]
-- **Supabase Dashboard:** [Supabase project URL]
-- **Vercel Dashboard:** [Vercel project URL]
-- **GitHub Repo:** [GitHub repo URL]
+- **GitHub Repo:** https://github.com/tcpalm-r/ari-jorge-collab
+- **Production Site:** https://ari-jorge-collab.vercel.app (or your Vercel URL)
+- **Supabase Dashboard:** https://app.supabase.com (Project: Ari and Jorge starter)
+- **Vercel Dashboard:** https://vercel.com/dashboard
 
 ## Key Commands
 
@@ -52,22 +73,44 @@ npm run lint         # Run linter
 npm run type-check   # Check TypeScript errors
 ```
 
-## Workflow
+## Workflow & Documentation
 
-See the `CLAUDE.md` file in this repo for detailed workflow instructions and best practices.
+**For Developers:**
+- 📘 **`CLAUDE.md`** - Complete workflow guide, coding standards, and best practices
+- 🔧 **`MCP_SETUP.md`** - Detailed MCP server setup and troubleshooting
 
-**Remember:** Never work directly on the `main` branch. Always create a feature branch, get PR approval, then merge.
+**Golden Rule:** Never work directly on the `main` branch. Always create a feature branch, get PR approval, then merge.
 
 ## Getting Help
 
-1. Ask Claude Code first
-2. Check the `CLAUDE.md` file for project-specific guidance
-3. Ask your teammate
-4. Check the [relevant documentation]
+1. **Ask Claude Code** - Your AI pair programmer (works best with MCP enabled!)
+2. **Check `CLAUDE.md`** - Comprehensive project guide
+3. **Check `MCP_SETUP.md`** - If having issues with GitHub/Vercel/Supabase commands
+4. **Ask your teammate** - Collaboration is key!
 
 ## Tech Stack
 
 - **Framework:** Next.js 14 with TypeScript
 - **Database:** Supabase (PostgreSQL)
-- **Hosting:** Vercel
-- **Styling:** [Your CSS solution]
+- **Hosting:** Vercel (auto-deploy from main branch)
+- **Styling:** Tailwind CSS
+- **AI Integration:** Claude Code with MCP servers for GitHub, Vercel, and Supabase
+
+## MCP-Enabled Commands
+
+Once MCP is set up, you can ask Claude Code natural language questions:
+
+**GitHub:**
+- "Show me all open pull requests"
+- "Create a new branch called feature/my-feature"
+- "What files changed in the last commit?"
+
+**Vercel:**
+- "What's the deployment status?"
+- "Show me the latest deployment logs"
+- "List all my Vercel projects"
+
+**Supabase:**
+- "Show me the database schema"
+- "Query all users from the database"
+- "Check if authentication is working"

@@ -89,3 +89,9 @@ Thumbs.db
 *.log
 *.tmp
 .cache/
+
+
+## MCP Configuration (API Tokens)
+
+.cursor/.env.mcp
+.cursor/.env.mcp.backup
