@@ -99,7 +99,7 @@ export default async function Home() {
           <div className="flex-1 flex items-center justify-center text-gray-400">
             <div className="text-center">
               <p>No employees found in the database.</p>
-              <p className="text-sm mt-2 text-gray-500">Add some employees to your Supabase 'employees' table to see them here.</p>
+              <p className="text-sm mt-2 text-gray-500">Add some employees to your Supabase &apos;employees&apos; table to see them here.</p>
             </div>
           </div>
         )}
