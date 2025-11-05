@@ -109,20 +109,19 @@ Share the Supabase `.env.local` credentials:
 
 **Use a password manager or encrypted channel** (never email/Slack!)
 
-### 3. GitHub Branch Protection (Optional but Recommended)
+### 3. GitHub Branch Protection ✅ CONFIGURED
 
-**Free Option:**
-Rely on team discipline and documentation
+**Status:** Fully enforced (repository is public)
 
-**Paid Option ($4/mo per user):**
-1. Upgrade to GitHub Pro
-2. Go to repo Settings → Branches
-3. Add protection rule for `main`:
-   - ✅ Require PR before merging
-   - ✅ Require 1 approval
-   - ✅ Include administrators
+Branch protection rules are active for `main`:
+- ✅ **Direct pushes blocked** - Must use Pull Requests
+- ✅ **1 approval required** - Another team member must review
+- ✅ **CI must pass** - All GitHub Actions checks must be green
+- ✅ **Enforced for admins** - Even administrators cannot bypass
+- ✅ **No force pushes** - History cannot be rewritten
+- ✅ **No deletion** - Main branch cannot be deleted
 
-This FORCES the PR workflow and prevents accidents.
+**What this means:** Your CEO/COO physically CANNOT push directly to main, even by accident. They must create feature branches and PRs. This prevents all common beginner mistakes.
 
 ### 4. Add Team Members
 - GitHub: Add as collaborators with write access
