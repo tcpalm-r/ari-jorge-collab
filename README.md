@@ -65,6 +65,15 @@ Next.js 14 collaborative development starter with full AI integration through Cl
 - **Supabase Dashboard:** https://app.supabase.com (Project: Ari and Jorge starter)
 - **Vercel Dashboard:** https://vercel.com/dashboard
 
+## Repository Status
+
+- **Visibility:** Public (enables free branch protection)
+- **Branch Protection:** ✅ Enabled on `main`
+  - Direct pushes to `main` are blocked
+  - All changes require Pull Requests with 1 approval
+  - CI checks must pass before merging
+  - Protection enforced for all team members (including admins)
+
 ## Key Commands
 
 ```bash

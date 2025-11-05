@@ -10,6 +10,8 @@
 
 **NEVER work directly on main branch**
 
+⚠️ **TECHNICAL ENFORCEMENT ENABLED:** GitHub will reject any direct pushes to `main`. This is not just a suggestion - it's technically impossible to push to main without a Pull Request.
+
 All changes must:
 1. Be made on a feature branch
 2. Have a Pull Request (PR) created
