@@ -74,15 +74,6 @@ GitHub (main) → Vercel (auto-deploy) → Supabase (database)
 "What branches exist?"
 ```
 
-**Vercel MCP:**
-```
-"Check deployment status"
-"Show latest deployment logs"
-"What's the production URL?"
-"Are there any failed deployments?"
-"Show me preview deployment for this PR"
-```
-
 **Supabase MCP:**
 ```
 "Show database schema"
@@ -98,6 +89,14 @@ GitHub (main) → Vercel (auto-deploy) → Supabase (database)
 "Run the development server"
 "Run tests"
 "Check for TypeScript errors"
+```
+
+**Vercel CLI (use terminal commands):**
+```bash
+vercel              # Deploy to preview
+vercel --prod       # Deploy to production
+vercel logs         # View deployment logs
+vercel ls           # List deployments
 ```
 
 ---

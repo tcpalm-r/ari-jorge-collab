@@ -1,12 +1,12 @@
 #!/bin/bash
 # MCP Setup Script for Claude Code in Cursor
-# This script helps you configure API tokens for GitHub, Supabase, and Vercel MCP servers
+# This script helps you configure API tokens for GitHub and Supabase MCP servers
 
 set -e
 
 echo "╔════════════════════════════════════════════════════════════╗"
 echo "║   MCP Server Setup for Claude Code                        ║"
-echo "║   GitHub + Supabase + Vercel Integration                  ║"
+echo "║   GitHub + Supabase Integration                           ║"
 echo "╚════════════════════════════════════════════════════════════╝"
 echo ""
 
@@ -40,7 +40,7 @@ if [ -f "$MCP_ENV_FILE" ]; then
 fi
 
 echo ""
-echo "You'll need three API tokens. Press Enter after each token."
+echo "You'll need two API tokens. Press Enter after each token."
 echo "Don't worry - these are stored locally and never committed to git."
 echo ""
 
@@ -59,17 +59,10 @@ echo "   Example format: kjfizpagyleefuucsdbu"
 echo ""
 read -p "Enter your Supabase project ref: " SUPABASE_REF
 
-# Vercel Token
-echo ""
-echo -e "${BLUE}3. Vercel API Token${NC}"
-echo "   Get it from: https://vercel.com/account/tokens"
-echo ""
-read -p "Enter your Vercel token: " VERCEL_TOKEN
-
 # Validate inputs
-if [ -z "$GITHUB_TOKEN" ] || [ -z "$SUPABASE_REF" ] || [ -z "$VERCEL_TOKEN" ]; then
+if [ -z "$GITHUB_TOKEN" ] || [ -z "$SUPABASE_REF" ]; then
     echo ""
-    echo -e "${RED}ERROR: All three tokens are required${NC}"
+    echo -e "${RED}ERROR: Both tokens are required${NC}"
     exit 1
 fi
 
@@ -83,22 +76,11 @@ GITHUB_PERSONAL_ACCESS_TOKEN=$GITHUB_TOKEN
 
 # Supabase Project Reference ID
 SUPABASE_PROJECT_REF=$SUPABASE_REF
-
-# Vercel API Token
-VERCEL_API_TOKEN=$VERCEL_TOKEN
 EOF
 
 echo ""
 echo -e "${GREEN}✓${NC} MCP tokens configured successfully!"
 echo ""
-
-# Install Vercel MCP dependencies if needed
-if [ ! -d "mcp-servers/vercel/node_modules" ]; then
-    echo -e "${YELLOW}Installing Vercel MCP server dependencies...${NC}"
-    cd mcp-servers/vercel && npm install && cd ../..
-    echo -e "${GREEN}✓${NC} Vercel MCP dependencies installed"
-    echo ""
-fi
 
 echo "╔════════════════════════════════════════════════════════════╗"
 echo "║                    Setup Complete! ✓                       ║"
@@ -111,9 +93,11 @@ echo "  3. Start chatting with Claude Code!"
 echo ""
 echo "Example commands you can try:"
 echo "  • 'Show me all open pull requests'"
-echo "  • 'What's the latest Vercel deployment status?'"
 echo "  • 'Query the database schema in Supabase'"
+echo "  • 'Create a new branch for my feature'"
 echo ""
 echo -e "${GREEN}Your tokens are stored in: $MCP_ENV_FILE${NC}"
 echo -e "${YELLOW}This file is git-ignored and will NOT be committed.${NC}"
+echo ""
+echo "Note: For Vercel deployments, use the Vercel CLI instead."
 echo ""

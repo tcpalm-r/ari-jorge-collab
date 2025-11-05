@@ -14,15 +14,6 @@
         "project_ref": "${SUPABASE_PROJECT_REF}",
         "read_only": "false"
       }
-    },
-    "vercel": {
-      "command": "node",
-      "args": [
-        "./mcp-servers/vercel/index.js"
-      ],
-      "env": {
-        "VERCEL_API_TOKEN": "${VERCEL_API_TOKEN}"
-      }
     }
   }
 }
