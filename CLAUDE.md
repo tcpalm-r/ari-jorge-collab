@@ -1,8 +1,8 @@
-# [Project Name]
+# Ari and Jorge Starter
 
 ## Project Overview
 
-# [describe what your app does and its business purpose]
+A Next.js 14 collaborative development starter project designed for non-technical collaboration using Claude Code. The project demonstrates best practices for AI-assisted development with GitHub workflow enforcement, automatic CI/CD, and database integration.
 
 ---
 
@@ -59,7 +59,6 @@ GitHub (main) → Vercel (auto-deploy) → Supabase (database)
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY`
-- [Add any other env vars]
 
 ---
 
@@ -174,10 +173,11 @@ npm run type-check   # Check TypeScript errors
 4. Test after resolving conflicts
 
 **Production Site Down:**
-1. Check Vercel deployment status
-2. Check Supabase service status
+1. Check Vercel deployment status at https://vercel.com/dashboard
+2. Check Supabase service status at https://status.supabase.com
 3. Look at recent merges to main
 4. Rollback: Redeploy previous version in Vercel dashboard
+5. Contact: Check with your development partner or team lead
 
 
 ---

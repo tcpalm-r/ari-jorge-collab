@@ -16,11 +16,11 @@ This Next.js 14 starter project is now fully configured for **non-technical coll
 
 ### ✅ GitHub Repository
 - **Repo:** https://github.com/tcpalm-r/ari-jorge-collab
-- **Branch protection:** Needs to be enabled manually (requires GitHub Pro for private repos)
+- **Branch protection:** ✅ Fully enabled and enforced (repository is public)
 - All code committed and pushed
 
 ### ✅ MCP (Model Context Protocol) Integration
-Three MCP servers configured for natural language interaction:
+Two MCP servers configured for natural language interaction:
 
 1. **GitHub MCP** (Remote)
    - Manage pull requests, branches, issues
@@ -30,9 +30,7 @@ Three MCP servers configured for natural language interaction:
    - Query database, check schema, manage data
    - Commands: "Show database schema", "Query users table"
 
-3. **Vercel MCP** (Local)
-   - Check deployments, view logs, manage projects
-   - Commands: "What's the deployment status?", "Show recent logs"
+**Note:** Vercel MCP has been removed due to security concerns (tokens have excessive permissions). Use Vercel CLI instead for deployments.
 
 ### ✅ Documentation Created
 - **README.md** - Quick start guide with MCP setup
@@ -61,7 +59,9 @@ Three MCP servers configured for natural language interaction:
    ```bash
    ./setup-mcp.sh
    ```
-   They'll need three API tokens (instructions provided in script)
+   They'll need two API tokens (instructions provided in script):
+   - GitHub Personal Access Token
+   - Supabase Project Reference ID
 
 4. **Set Up Environment Variables:**
    - Copy `.env.local.example` to `.env.local`
@@ -84,23 +84,21 @@ Three MCP servers configured for natural language interaction:
 
 ## What You Still Need to Configure
 
-### 1. Customize Documentation
-Update these placeholder sections:
+### 1. Verify Production Deployment
 
-**In `README.md`:**
-- Production URL (once Vercel finishes deploying)
+**Production URL:** https://ari-jorge-collab.vercel.app
 
-**In `CLAUDE.md`:**
-- Line 1: Replace `[Project Name]` with actual project name
-- Line 5: Add project description and business purpose
-- Line 181-186: Add emergency contact information
-- Update any other `[placeholders]`
+This URL is automatically generated from your GitHub repository name. Verify it's live by:
+1. Visiting the URL in your browser
+2. Checking Vercel dashboard for deployment status
+3. Confirming the employee directory page loads correctly
+
+If you need to change the domain, you can configure a custom domain in Vercel dashboard.
 
 ### 2. Share API Tokens Securely
 Your CEO/COO will need:
 - GitHub Personal Access Token
 - Supabase Project Reference ID: `kjfizpagyleefuucsdbu`
-- Vercel API Token
 
 Share the Supabase `.env.local` credentials:
 - `NEXT_PUBLIC_SUPABASE_URL`
@@ -108,6 +106,8 @@ Share the Supabase `.env.local` credentials:
 - `SUPABASE_SERVICE_ROLE_KEY`
 
 **Use a password manager or encrypted channel** (never email/Slack!)
+
+**Note:** Vercel access is optional - only needed if they want dashboard access. Deployments happen automatically via GitHub.
 
 ### 3. GitHub Branch Protection ✅ CONFIGURED
 
@@ -157,9 +157,10 @@ Claude: [Commits via git, creates PR via GitHub MCP]
 ```
 User: "Is the site deployed yet?"
 
-Claude: [Checks via Vercel MCP]
+Claude: "Let me check the Vercel deployment status for you."
+[Runs vercel CLI or checks Vercel dashboard]
 "Yes! Your latest deployment finished 2 minutes ago.
-Status: Ready. URL: https://your-app.vercel.app"
+Status: Ready. Production URL is live."
 ```
 
 **Database query:**
@@ -196,10 +197,11 @@ Claude: [Queries via Supabase MCP]
 - "Show me all open PRs"
 - "Pull the latest changes from main"
 
-**Vercel:**
-- "Check deployment status"
-- "Show me deployment logs"
-- "What's the production URL?"
+**Vercel (via CLI):**
+- Terminal: `vercel` - Deploy to preview
+- Terminal: `vercel --prod` - Deploy to production
+- Terminal: `vercel logs` - View deployment logs
+- Or: "Help me check Vercel deployment status"
 
 **Supabase:**
 - "Show me the database schema"
@@ -247,12 +249,12 @@ Your CEO/COO should be able to:
 
 ## Next Steps
 
-1. **Finish Vercel deployment** and update README with production URL
-2. **Customize CLAUDE.md** with actual project details
-3. **Share credentials** securely with your team
-4. **Schedule a walkthrough** where you demonstrate the workflow
-5. **Have them practice** with a simple task (like adding their name to the homepage)
-6. **Set up regular check-ins** for the first week
+1. **Verify Vercel deployment** at https://ari-jorge-collab.vercel.app
+2. **Share credentials** securely with your team (use password manager)
+3. **Schedule a walkthrough** where you demonstrate the workflow
+4. **Have them practice** with a simple task (like adding their name to the homepage)
+5. **Set up regular check-ins** for the first week
+6. **Review the employee directory** - it's already built and deployed!
 
 ---
 
