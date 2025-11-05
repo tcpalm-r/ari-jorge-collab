@@ -31,18 +31,6 @@ Thumbs.db
 .idea/
 
 
-## Large Data Files
-
-*.svg
-*.png
-*.jpg
-*.jpeg
-*.gif
-*.ico
-*.pdf
-*.zip
-*.tar.gz
-
 
 ## Generated Files
 
