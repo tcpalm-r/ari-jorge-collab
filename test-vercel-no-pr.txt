@@ -1,0 +1,7 @@
+This file tests that pushing to a feature branch WITHOUT creating a PR does not trigger Vercel deployment.
+
+Expected behavior:
+- Push to feature branch = No Vercel deployment
+- Create PR = Vercel preview deployment triggered
+
+Test timestamp: 2025-11-05
