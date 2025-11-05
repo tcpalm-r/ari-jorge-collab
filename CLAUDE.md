@@ -269,3 +269,23 @@ npm run type-check   # Check TypeScript errors
 - Check TypeScript: `npm run type-check`
 - Run linter: `npm run lint`
 - Test key user flows manually
+
+**After Committing Changes:**
+
+⚠️ **IMPORTANT: NEVER automatically create a Pull Request without asking first!**
+
+After committing changes to a feature branch, ALWAYS pause and ask the user:
+
+- "Would you like to continue adding more features to this branch?"
+- "Would you like to test the changes more thoroughly?"
+- "Would you like to review everything yourself first?"
+- "Or are you ready for me to create a PR?"
+
+Only create a PR after the user explicitly confirms they're ready. The user may want to:
+
+- Add more commits to the same branch
+- Test locally first
+- Review the changes themselves
+- Make additional modifications
+
+**Never assume the user is ready for a PR just because a commit was successful.**
