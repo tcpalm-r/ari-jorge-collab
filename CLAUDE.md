@@ -45,6 +45,112 @@ All changes must:
 
 ---
 
+## Git Worktrees (Parallel Agent Work)
+
+**Git worktrees allow you to work on multiple branches simultaneously in separate directories.** This is perfect for running multiple AI agents at the same time, each working on different features.
+
+### Quick Start
+
+```bash
+# Create a new worktree for a feature branch
+./scripts/worktree.sh create feature/my-new-feature
+
+# List all worktrees
+./scripts/worktree.sh list
+
+# Remove a worktree (keeps the branch)
+./scripts/worktree.sh remove feature/my-new-feature
+```
+
+### How It Works
+
+1. **Main Repository**: Your main workspace (current directory)
+2. **Worktrees Directory**: All additional worktrees are created in `worktrees/`
+3. **Independent Development**: Each worktree can:
+   - Run its own dev server (`npm run dev`)
+   - Have its own terminal sessions
+   - Be opened in separate Cursor/VS Code windows
+   - Run different AI agents simultaneously
+
+### Workflow for Multiple Agents
+
+**Scenario: Running 2 agents in parallel**
+
+```bash
+# Agent 1: Working on feature A (in main workspace)
+cd "/Users/thomas.palmer/Documents/Ari and Jorge Starter"
+git checkout feature/feature-a
+npm run dev  # Runs on port 3000
+
+# Agent 2: Working on feature B (in worktree)
+./scripts/worktree.sh create feature/feature-b
+cd worktrees/feature/feature-b
+npm install  # First time only
+npm run dev  # Runs on port 3001 (Next.js auto-increments)
+```
+
+**Each worktree:**
+- Has its own `node_modules/` (shared via symlinks when possible)
+- Shares the same `.env.local` (via symlink)
+- Can commit and push independently
+- Follows all the same Golden Rules (feature branches, PRs, etc.)
+
+### Best Practices
+
+1. **Always create branches from main:**
+   ```bash
+   # The script does this automatically
+   ./scripts/worktree.sh create feature/new-feature
+   ```
+
+2. **Keep worktrees organized:**
+   - All worktrees go in `worktrees/` directory
+   - Use descriptive branch names
+   - Remove worktrees when done: `./scripts/worktree.sh remove feature/name`
+
+3. **Environment Variables:**
+   - `.env.local` is automatically symlinked from main repo
+   - Changes in one worktree affect all (by design - shared config)
+
+4. **Port Conflicts:**
+   - Next.js automatically increments ports (3000, 3001, 3002, etc.)
+   - Each worktree can run its own dev server
+
+5. **Git Operations:**
+   - Commits in any worktree affect the same repository
+   - Push/pull from any worktree works normally
+   - All worktrees share the same `.git` directory
+
+### Managing Worktrees
+
+```bash
+# List all worktrees
+./scripts/worktree.sh list
+
+# Remove a worktree (doesn't delete the branch)
+./scripts/worktree.sh remove feature/old-feature
+
+# Clean up stale references
+./scripts/worktree.sh prune
+```
+
+### Troubleshooting
+
+**"Worktree already exists" error:**
+- The branch might already have a worktree
+- Use `./scripts/worktree.sh list` to see all worktrees
+- Remove the old worktree first if needed
+
+**"Port already in use" error:**
+- Another worktree is using that port
+- Next.js should auto-increment, but you can manually set: `PORT=3002 npm run dev`
+
+**"Branch diverged" warnings:**
+- Each worktree can have different commits
+- Sync with main regularly: `git pull origin main` (in each worktree)
+
+---
+
 ## Tech Stack
 
 **Frontend & Backend:**
