@@ -26,7 +26,7 @@ All AI agents working on this project MUST:
 ### Pull Requests
 
 - Never create PRs without user approval after committing
-- Follow PR workflow documented in `PR_WORKFLOW_GUIDE.md`
+- Follow PR workflow documented in `USER_GUIDE.md`
 - Ensure CI passes before requesting merge
 - Include clear descriptions following `CLAUDE.md` guidelines
 
@@ -49,7 +49,7 @@ All AI agents working on this project MUST:
 - **`CLAUDE.md`** - Primary project rules and guidelines
 - **`.cursorrules`** - Cursor-specific configuration
 - **`AGENTS.md`** (this file) - Agent behavior documentation
-- **`PR_WORKFLOW_GUIDE.md`** - PR workflow for non-technical users
+- **`USER_GUIDE.md`** - Complete user guide including PR workflow for non-technical users
 - **`GITHUB_ACTIONS_DEPLOYMENT.md`** - Deployment configuration
 
 ## Tech Stack Summary
