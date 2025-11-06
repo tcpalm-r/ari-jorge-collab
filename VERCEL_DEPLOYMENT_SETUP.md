@@ -25,19 +25,31 @@ bash vercel-build-ignore.sh
 
 ### 2. How It Works
 
-The `vercel-build-ignore.sh` script checks Vercel environment variables:
+The `vercel-build-ignore.sh` script uses **VERCEL_ENV** to determine when to build:
 
-| Condition                | Environment Check                   | Action   |
-| ------------------------ | ----------------------------------- | -------- |
-| Production (main branch) | `VERCEL_ENV === "production"`       | ✅ Build |
-| Pull Request             | `VERCEL_GIT_PULL_REQUEST_ID` is set | ✅ Build |
-| Regular branch push      | Neither condition above             | ⏭️ Skip  |
+| Condition                | Environment Check             | Action   |
+| ------------------------ | ----------------------------- | -------- |
+| Production (main branch) | `VERCEL_ENV === "production"` | ✅ Build |
+| Pull Request or Preview  | `VERCEL_ENV === "preview"`    | ✅ Build |
+| Other scenarios          | Any other value               | ⏭️ Skip  |
+
+**Why VERCEL_ENV?**
+
+- ✅ Set immediately by Vercel at build start (no race conditions)
+- ✅ Reliable for both PRs and production deployments
+- ✅ No dependency on GitHub metadata propagation
+- ✅ Works correctly even when PR is first created
+
+**Previous Approach (deprecated):** Earlier versions checked `VERCEL_GIT_PULL_REQUEST_ID`, which sometimes had timing issues where the first build after PR creation would be skipped because GitHub hadn't fully propagated the PR metadata yet.
 
 ### 3. Vercel Environment Variables Reference
 
-- `VERCEL_ENV`: `production`, `preview`, or `development`
+- `VERCEL_ENV`: `production`, `preview`, or `development` (set by Vercel immediately)
+  - `production` - Deployments from the production branch (main)
+  - `preview` - Deployments from PRs and preview branches
+  - `development` - Local development (not used in cloud builds)
 - `VERCEL_GIT_COMMIT_REF`: The git branch name
-- `VERCEL_GIT_PULL_REQUEST_ID`: Only populated when building a PR
+- `VERCEL_GIT_PULL_REQUEST_ID`: PR number (may not be set immediately on PR creation)
 
 ### 4. Testing the Configuration
 
@@ -74,11 +86,15 @@ Expected: ✅ Vercel creates production deployment
 
 ### Issue: PRs are not triggering preview deployments
 
-**Solution**: Verify the Ignored Build Step command in Vercel dashboard is exactly:
+**Solution 1**: Verify the Ignored Build Step command in Vercel dashboard is exactly:
 
 ```bash
 bash vercel-build-ignore.sh
 ```
+
+**Solution 2**: Check that the script is using `VERCEL_ENV` (not `VERCEL_GIT_PULL_REQUEST_ID`). The current version should check for `VERCEL_ENV === "preview"` which avoids timing issues with GitHub PR metadata.
+
+**Note**: If you're using the latest version of the script (checking `VERCEL_ENV`), preview deployments should trigger immediately when PRs are created, without any delays or race conditions.
 
 ### Issue: Script not found error
 
