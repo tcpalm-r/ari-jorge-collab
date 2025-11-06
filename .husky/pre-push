@@ -83,11 +83,25 @@ echo ""
 # 5. Check for common mistakes
 echo "🔍 Checking for common issues..."
 
-# Check for console.log statements (warning only, doesn't block)
-console_logs=$(git diff origin/$current_branch HEAD --diff-filter=ACM -- '*.ts' '*.tsx' '*.js' '*.jsx' | grep -c "console.log")
-if [ "$console_logs" -gt 0 ]; then
-  echo "⚠️  Found $console_logs console.log statements in your changes."
-  echo "   Consider removing debug logs before pushing."
+# Check if remote branch exists
+if git rev-parse --verify "origin/$current_branch" >/dev/null 2>&1; then
+  # Remote branch exists, check for console.log statements
+  console_logs=$(git diff origin/$current_branch HEAD --diff-filter=ACM -- '*.ts' '*.tsx' '*.js' '*.jsx' 2>/dev/null | grep -c "console.log" || echo 0)
+  if [ "$console_logs" -gt 0 ]; then
+    echo "⚠️  Found $console_logs console.log statements in your changes."
+    echo "   Consider removing debug logs before pushing."
+    echo ""
+  fi
+
+  # Check for TODO or FIXME in new code (warning only)
+  todos=$(git diff origin/$current_branch HEAD --diff-filter=ACM 2>/dev/null | grep -c "TODO\|FIXME" || echo 0)
+  if [ "$todos" -gt 0 ]; then
+    echo "ℹ️  Found $todos TODO/FIXME comments in your changes."
+    echo "   Make sure these are intentional before pushing."
+    echo ""
+  fi
+else
+  echo "ℹ️  First push to this branch - skipping diff checks"
   echo ""
 fi
 
@@ -99,14 +113,6 @@ if git diff --cached --name-only | grep -q "^\.env$\|^\.env\.local$"; then
   echo "Please unstage them: git reset HEAD .env .env.local"
   echo ""
   exit 1
-fi
-
-# Check for TODO or FIXME in new code (warning only)
-todos=$(git diff origin/$current_branch HEAD --diff-filter=ACM | grep -c "TODO\|FIXME")
-if [ "$todos" -gt 0 ]; then
-  echo "ℹ️  Found $todos TODO/FIXME comments in your changes."
-  echo "   Make sure these are intentional before pushing."
-  echo ""
 fi
 
 echo "✅ Pre-push validation complete!"
