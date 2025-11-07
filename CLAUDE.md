@@ -56,15 +56,25 @@ This project uses a simplified workflow for solo development. All work happens d
 
 ---
 
-## Fork and Rename Workflow
+## Template Rename Workflow
 
-**When user says: "fork and rename to [name]" or "fork and rename to [name], then push"**
+**This is a GitHub template repository. User creates new projects via "Use this template" on GitHub.**
 
-AI automatically forks the repository on GitHub and handles the entire rename process. Zero manual steps needed.
+**When user says: "rename to [name]" or "rename to [name], then push"**
+
+AI automatically renames all project files and pushes to the current repository. Simple and clean.
+
+### Prerequisites (User Does This First)
+
+1. Go to template repo: https://github.com/tcpalm-r/ari-jorge-collab
+2. Click **"Use this template"** button
+3. Name the new repository (GitHub handles the kebab-case)
+4. Clone the new repository locally
+5. Open in Cursor and say: "rename to [Project Name], then push"
 
 ### Automatic Name Normalization
 
-AI will automatically normalize the project name for URLs and filenames:
+AI will automatically normalize the project name for different contexts:
 
 **For repository/package name (kebab-case):**
 
@@ -89,19 +99,15 @@ AI will automatically normalize the project name for URLs and filenames:
 **AI automatically performs these steps in order:**
 
 1. **Check git status** - ensure working directory is clean
-2. **Normalize the project name** to kebab-case (e.g., "my-project")
-3. **Create title-case version** for display (e.g., "My Project")
-4. **Fork the repository:**
-   - **FIRST:** Try using GitHub MCP if available (preferred method)
-   - **FALLBACK:** Use `gh repo fork --fork-name [normalized-name]` if MCP unavailable
-5. **Get GitHub username** from the newly created fork
-6. **Update all project files:**
+2. **Get current GitHub username and repo name** from git remote URL
+3. **Normalize the project name** to kebab-case (e.g., "customer-portal")
+4. **Create title-case version** for display (e.g., "Customer Portal")
+5. **Update all project files:**
    - `package.json` - Update `name` field (kebab-case)
    - `README.md` - Update title (Title Case) and all GitHub URLs (kebab-case)
    - `CLAUDE.md` - Update title (Title Case)
-7. **Update git remote** to point to the forked repo automatically
-8. **Commit all changes** with proper message
-9. **Push to forked repository** (if user said "then push")
+6. **Commit all changes** with proper message
+7. **Push to repository** (if user said "then push")
 
 ### Files Updated Automatically
 
@@ -131,42 +137,40 @@ AI will automatically normalize the project name for URLs and filenames:
 
 ### Example Usage
 
-**User says:** "fork and rename to Customer Portal, then push"
+**Step 1: User creates from template on GitHub**
 
-**AI does automatically:**
+- Clicks "Use this template" → Names it "customer-portal"
+- Clones: `git clone https://github.com/joedoe/customer-portal.git`
+
+**Step 2: User says:** "rename to Customer Portal, then push"
+
+**Step 3: AI does automatically:**
 
 1. Checks git status is clean
-2. Normalizes name: "Customer Portal" → "customer-portal" (kebab-case)
-3. Creates title: "Customer Portal" (Title Case)
-4. Forks repository:
-   - Tries GitHub MCP first (if configured)
-   - Falls back to: `gh repo fork tcpalm-r/ari-jorge-collab --fork-name customer-portal`
-5. Gets username from fork (e.g., "joedoe")
-6. Updates package.json: `"name": "customer-portal"`
-7. Updates README.md title: `# Customer Portal`
-8. Updates all GitHub URLs: `https://github.com/joedoe/customer-portal`
-9. Updates CLAUDE.md title: `# Customer Portal`
-10. Updates git remote: `https://github.com/joedoe/customer-portal.git`
-11. Commits: "chore: fork and rename to customer-portal"
-12. Pushes to forked repo
+2. Gets repo info from git remote: `joedoe/customer-portal`
+3. Normalizes name: "Customer Portal" → "customer-portal" (kebab-case)
+4. Creates title: "Customer Portal" (Title Case)
+5. Updates package.json: `"name": "customer-portal"`
+6. Updates README.md title: `# Customer Portal`
+7. Updates all GitHub URLs: `https://github.com/joedoe/customer-portal`
+8. Updates CLAUDE.md title: `# Customer Portal`
+9. Commits: "chore: rename project to Customer Portal"
+10. Pushes to repository
 
-**Done!** Repository forked, renamed, and pushed. Zero manual steps.
+**Done!** Project renamed and pushed. Clean, simple workflow.
 
 ### AI Automation Rules
 
 ✅ **AI MUST automatically do:**
 
-- **PRIORITY 1:** Try GitHub MCP to fork repository (if available)
-- **PRIORITY 2:** Fall back to `gh repo fork --fork-name [kebab-case-name]` if MCP unavailable
-- Check if `gh` CLI is available as fallback
+- Check git status is clean
+- Extract username and repo name from git remote URL
 - Normalize project name to kebab-case for URLs/filenames
 - Create Title Case version for display titles
-- Extract GitHub username from fork URL
 - Update package.json with kebab-case name
 - Update README.md title with Title Case
-- Update README.md URLs with kebab-case
+- Update README.md URLs with kebab-case from git remote
 - Update CLAUDE.md title with Title Case
-- Update git remote to forked repo
 - Commit changes with proper message
 - Push if user said "then push"
 
@@ -175,21 +179,13 @@ AI will automatically normalize the project name for URLs and filenames:
 - Edit `.env` or `.env.local` files
 - Push without user saying "then push"
 - Remove workflow documentation from CLAUDE.md
-- Skip the fork step - always fork first
-- Use CLI before checking for GitHub MCP
+- Try to fork or create repositories (user does this via GitHub template)
 
 ⚠️ **AI should check and warn if:**
 
-- Neither GitHub MCP nor CLI (`gh`) are available
-- User is not authenticated (check `gh auth status` if using CLI)
 - Working directory has uncommitted changes
-- Fork already exists (may need to delete old fork first)
-
-**Fork Method Priority:**
-
-1. **GitHub MCP** (preferred - use if configured globally)
-2. **GitHub CLI** (`gh repo fork`) (fallback if MCP unavailable)
-3. **Manual** (last resort - guide user to fork on GitHub)
+- Cannot detect GitHub username/repo from git remote
+- User hasn't created from template yet (no remote or still points to template repo)
 
 ---
 
