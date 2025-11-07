@@ -5,20 +5,24 @@
 #
 # Build when:
 # - It's a pull request (preview deployment)
-# - It's the main branch (production deployment)
 #
 # Skip when:
+# - It's the main branch (production handled by GitHub Actions)
 # - It's a regular branch push without a PR
+#
+# NOTE: Production deployments are handled by GitHub Actions workflow
+# to ensure they only happen after CI checks pass. Vercel's native
+# GitHub integration is disabled for main branch to prevent duplicate deployments.
 
 echo "🔍 Checking if build should proceed..."
 echo "VERCEL_ENV: $VERCEL_ENV"
 echo "VERCEL_GIT_COMMIT_REF: $VERCEL_GIT_COMMIT_REF"
 echo "VERCEL_GIT_PULL_REQUEST_ID: $VERCEL_GIT_PULL_REQUEST_ID"
 
-# Always build production (main branch)
+# Skip production builds - handled by GitHub Actions
 if [[ "$VERCEL_ENV" == "production" ]]; then
-  echo "✅ Building: Production deployment (main branch)"
-  exit 1
+  echo "⏭️  Skipping: Production deployment handled by GitHub Actions CI/CD"
+  exit 0
 fi
 
 # Always build pull requests (preview deployment)
