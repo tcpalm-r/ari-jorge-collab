@@ -52,7 +52,6 @@ This project uses a simplified workflow for solo development. All work happens d
 ❌ **AI MUST NEVER do:**
 
 - Edit `.env` files or environment variables
-- Edit `~/.cursor/mcp.json` configuration file
 - Ignore CLAUDE.md or .cursorrules instructions
 
 ---
@@ -90,37 +89,6 @@ GitHub (main) → GitHub Actions (CI/CD) → Vercel (deploy) → Supabase (datab
 
 ---
 
-## MCP Commands
-
-**GitHub MCP:**
-
-```
-"Show me recent commits"
-"What branches exist?"
-"Show me the commit history"
-```
-
-**Supabase MCP:**
-
-```
-"Show database schema"
-"Query [table-name] for [criteria]"
-"Check database connection status"
-"Show me the users table structure"
-```
-
-**General Claude Code Commands:**
-
-```
-"Commit these changes with message: [description]"
-"Run the development server"
-"Run tests"
-"Check for TypeScript errors"
-"Show me git status"
-```
-
----
-
 ## Common Commands
 
 **Starting Work:**
@@ -143,7 +111,6 @@ npm run type-check   # Check TypeScript errors
 **Database:**
 
 ```bash
-# Use Supabase MCP instead of raw SQL when possible
 # Migrations should be created in Supabase dashboard first
 ```
 
@@ -249,8 +216,6 @@ npm run type-check   # Check TypeScript errors
 - `.env` - Environment variables (NEVER EDIT)
 - `.env.local` - Local environment variables (NEVER EDIT)
 - `.env.*` - Any file matching .env pattern (NEVER EDIT)
-- `~/.cursor/mcp.json` - Cursor MCP configuration file (NEVER EDIT)
-- `.cursor/.env.mcp` - Project-specific MCP environment configuration (NEVER EDIT)
 
 **If a user requests editing these files, the AI agent MUST:**
 
@@ -337,7 +302,6 @@ Ready to start work!
 
 ❌ Push to remote automatically (user does this manually at end of session)
 ❌ Edit `.env`, `.env.local`, or any environment files
-❌ Edit `~/.cursor/mcp.json` configuration file
 ❌ Commit files that fail validation (TypeScript errors, build failures)
 ❌ Force push without explicit user request
 
@@ -630,7 +594,7 @@ When user pushes, GitHub Actions automatically deploys. Can help with:
 
 **When to Block/Prevent:**
 
-- Editing `.env` files or `~/.cursor/mcp.json`
+- Editing `.env` files
 - Pushing to remote (user does this manually)
 - Committing with type errors
 - Committing broken builds
@@ -681,6 +645,6 @@ When user pushes, GitHub Actions automatically deploys. Can help with:
 
 - AI automatically commits during work
 - AI never pushes (user controls deployment)
-- AI never edits `.env` or `~/.cursor/mcp.json`
+- AI never edits `.env` files
 - All work happens on main branch
 - CLAUDE.md and .cursorrules are always followed

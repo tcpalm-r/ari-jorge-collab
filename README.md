@@ -8,7 +8,6 @@ Next.js 14 collaborative development starter with full AI integration through Cl
 
 **Quick Reference:**
 
-- 🔧 **[MCP_SETUP.md](./MCP_SETUP.md)** - MCP server setup and troubleshooting
 - 📘 **[CLAUDE.md](./CLAUDE.md)** - Complete technical guide, automated workflows, coding standards
 
 ---
@@ -30,22 +29,7 @@ git clone https://github.com/tcpalm-r/ari-jorge-collab.git
 cd ari-jorge-collab
 ```
 
-#### 2. **Set Up MCP Servers (5 minutes)**
-
-MCP servers enable Claude Code to interact with GitHub and Supabase using natural language.
-
-```bash
-./setup-mcp.sh
-```
-
-You'll be prompted for two API credentials:
-
-- GitHub Personal Access Token
-- Supabase Project Reference ID
-
-**📖 Detailed instructions:** See [MCP_SETUP.md](./MCP_SETUP.md)
-
-#### 3. **Set up environment variables**
+#### 2. **Set up environment variables**
 
 ```bash
 cp .env.local.example .env.local
@@ -53,29 +37,21 @@ cp .env.local.example .env.local
 
 Then edit `.env.local` with your Supabase credentials (get from team lead)
 
-#### 4. **Install dependencies**
+#### 3. **Install dependencies**
 
 ```bash
 npm install
 ```
 
-#### 5. **Start development server**
+#### 4. **Start development server**
 
 ```bash
 npm run dev
 ```
 
-#### 6. **Open your browser**
+#### 5. **Open your browser**
 
 Navigate to http://localhost:3000 - you should see the app running!
-
-#### 7. **Test Claude Code + MCP**
-
-In Cursor, try asking Claude:
-
-- "Show me recent commits"
-- "Show me the Supabase database schema"
-- "What's on the employee directory page?"
 
 ---
 
@@ -146,9 +122,8 @@ See [CLAUDE.md](./CLAUDE.md) for complete workflow instructions.
 
 ## Getting Help
 
-1. **Ask Claude Code** - Your AI pair programmer (works best with MCP enabled!)
+1. **Ask Claude Code** - Your AI pair programmer
 2. **Check [CLAUDE.md](./CLAUDE.md)** - Comprehensive technical guide
-3. **Check [MCP_SETUP.md](./MCP_SETUP.md)** - If having issues with GitHub/Supabase commands
 
 ---
 
@@ -158,7 +133,7 @@ See [CLAUDE.md](./CLAUDE.md) for complete workflow instructions.
 - **Database:** Supabase (PostgreSQL)
 - **Hosting:** Vercel (deployed via GitHub Actions)
 - **Styling:** Tailwind CSS (with custom dark mode)
-- **AI Integration:** Claude Code with MCP servers for GitHub and Supabase
+- **AI Integration:** Claude Code
 
 ---
 
@@ -173,30 +148,6 @@ See [CLAUDE.md](./CLAUDE.md) for complete workflow instructions.
 - Real-time data fetching using Next.js 14 Server Components
 
 **Location:** `/app/page.tsx`
-
----
-
-## MCP-Enabled Commands
-
-Once MCP is set up, you can ask Claude Code natural language questions:
-
-**GitHub:**
-
-- "Show me recent commits"
-- "What files changed in the last commit?"
-- "Show me the commit history"
-
-**Supabase:**
-
-- "Show me the database schema"
-- "Query the employees table"
-- "Check database connection status"
-- "What tables exist in the database?"
-
-**Deployment:**
-
-- GitHub Actions automatically deploys when you push to main
-- Check deployment status in GitHub Actions dashboard
 
 ---
 
