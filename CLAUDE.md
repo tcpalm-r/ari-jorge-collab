@@ -56,6 +56,213 @@ This project uses a simplified workflow for solo development. All work happens d
 
 ---
 
+## Fork and Rename Workflow
+
+**When user says: "fork and rename to [new-name], then push"**
+
+This is a common workflow for creating new projects from this starter template. Follow these steps exactly:
+
+### Step 1: Verify Current State
+
+```bash
+git status
+```
+
+- Ensure working directory is clean
+- If uncommitted changes exist, ask user whether to commit or discard them first
+
+### Step 2: Create New GitHub Repository
+
+**IMPORTANT:** AI agent should guide user through this, as AI cannot create GitHub repos directly:
+
+1. Inform user: "Please create a new GitHub repository named `[new-name]` at https://github.com/new"
+2. Tell user: "Make sure to create it as **empty** (no README, no .gitignore, no license)"
+3. Wait for user confirmation that repo is created
+4. Ask user for the new repository URL (e.g., `https://github.com/username/[new-name].git`)
+
+### Step 3: Update Remote URL
+
+```bash
+# Remove old remote
+git remote remove origin
+
+# Add new remote
+git remote add origin https://github.com/username/[new-name].git
+
+# Verify new remote
+git remote -v
+```
+
+### Step 4: Update Project Files
+
+Update all references to the old project name with the new name:
+
+**Files to update:**
+
+1. `package.json` - Update `name` field to `[new-name]`
+2. `README.md` - Update title and all project-specific references
+3. `CLAUDE.md` - Update title at top of file
+
+**Search and replace pattern:**
+
+- Old name references → New name
+- Old GitHub URLs → New GitHub URLs
+- Old project descriptions → Update as needed
+
+**Example updates:**
+
+```json
+// package.json
+{
+  "name": "[new-name]",
+  ...
+}
+```
+
+```markdown
+# README.md
+
+# [New Name]
+
+- **GitHub Repo:** https://github.com/username/[new-name]
+- **GitHub Actions (CI/CD):** https://github.com/username/[new-name]/actions
+- **Production Site:** https://[new-name].vercel.app (update after Vercel deployment)
+```
+
+### Step 5: Clean Up Starter-Specific Content
+
+**Remove or update these:**
+
+- Remove starter-specific example code/components (if any)
+- Update README.md to reflect the new project purpose
+- Keep the workflow documentation intact (Golden Rules, etc.)
+
+### Step 6: Commit Renaming Changes
+
+```bash
+git add -A
+git commit -m "chore: rename project to [new-name]
+
+- Updated package.json name
+- Updated README.md with new project name and URLs
+- Updated CLAUDE.md title
+- Changed git remote to new repository
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+```
+
+### Step 7: Push to New Repository
+
+```bash
+# Push to new repo (use -u to set upstream)
+git push -u origin main
+```
+
+### Step 8: Verify and Configure Integrations
+
+**After push, guide user to configure:**
+
+1. **Vercel Integration:**
+   - "Go to https://vercel.com/new"
+   - "Import your new GitHub repo: username/[new-name]"
+   - "Add environment variables (NEXT_PUBLIC_SUPABASE_URL, etc.)"
+   - "Deploy and note the production URL"
+
+2. **GitHub Actions:**
+   - Should automatically detect workflows from the pushed code
+   - First deployment will run automatically on push
+   - Verify at: `https://github.com/username/[new-name]/actions`
+
+3. **Supabase (if new project):**
+   - User needs to either reuse existing Supabase project or create new one
+   - Update `.env.local` with appropriate credentials
+   - Update Vercel environment variables
+
+### Step 9: Final Verification
+
+```bash
+# Verify remote is correct
+git remote -v
+
+# Verify branch tracking
+git branch -vv
+
+# Check deployment status
+# Guide user to check Vercel dashboard
+```
+
+### Success Criteria
+
+✅ New GitHub repository created and pushed
+✅ All files updated with new project name
+✅ Git remote pointing to new repository
+✅ Vercel connected and deployed (if applicable)
+✅ Environment variables configured
+✅ GitHub Actions working
+
+### Common Issues and Solutions
+
+**Issue: "Permission denied" on push**
+
+- Ensure user has write access to the new GitHub repo
+- Check if GitHub authentication is set up correctly in Cursor
+
+**Issue: "Repository not found"**
+
+- Verify the new repository was created on GitHub
+- Check that the remote URL is correct: `git remote -v`
+
+**Issue: "Pre-push hook fails"**
+
+- TypeScript errors: Fix before pushing
+- Build errors: Run `npm run build` locally and fix errors
+
+**Issue: Vercel deployment fails**
+
+- Check environment variables are set in Vercel dashboard
+- Verify build command and output directory settings
+
+### Automation Rules for AI
+
+**When user says "fork and rename to [new-name]":**
+
+1. ✅ **DO automatically:**
+   - Check git status
+   - Update package.json, README.md, CLAUDE.md
+   - Search for old project name references
+   - Commit the renaming changes
+   - Guide user through GitHub repo creation
+   - Update git remote URLs
+
+2. ❌ **DO NOT automatically:**
+   - Create GitHub repository (user must do this)
+   - Push without user confirmation
+   - Delete or modify `.env` files
+   - Remove workflow documentation
+
+3. 🤔 **ASK user first:**
+   - "Do you want to keep the example components or remove them?"
+   - "Should I update the project description in README?"
+   - "Have you created the new GitHub repository?"
+   - "Do you have the new repository URL?"
+
+### Quick Command Reference
+
+```bash
+# Complete fork and rename workflow
+git status                                              # Check clean state
+git remote remove origin                                # Remove old remote
+git remote add origin https://github.com/user/new.git  # Add new remote
+# Update package.json, README.md, CLAUDE.md with new name
+git add -A                                              # Stage changes
+git commit -m "chore: rename project to [new-name]"    # Commit
+git push -u origin main                                 # Push to new repo
+```
+
+---
+
 ## Tech Stack
 
 **Frontend & Backend:**
