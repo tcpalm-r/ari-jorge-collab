@@ -8,26 +8,28 @@ A Next.js 14 collaborative development starter project designed for non-technica
 
 ## Golden Rules
 
-**NEVER work directly on main branch**
+**SOLO DEVELOPMENT - DIRECT TO MAIN WORKFLOW**
 
-⚠️ **TECHNICAL ENFORCEMENT ENABLED:** GitHub will reject any direct pushes to `main`. This is not just a suggestion - it's technically impossible to push to main without a Pull Request.
+This project uses a simplified workflow for solo development. All work happens directly on the `main` branch.
 
-All changes must:
+**Session Workflow:**
 
-1. Be made on a feature branch
-2. Have a Pull Request (PR) created
-3. Be reviewed by the other person
-4. Get explicit approval before merging
-5. Be merged through GitHub (not locally)
+1. **Session Start (Automatic):**
+   - AI agent automatically runs `git pull` to sync with remote
+   - AI agent runs `git status` to check for uncommitted changes
+   - If main is behind remote: automatically update to latest
+   - Report current status to user
 
-**Daily Workflow:**
+2. **During Work (Automatic):**
+   - AI agent automatically commits after completing logical units of work
+   - Commits happen immediately after completing a task/feature
+   - Every commit uses conventional commit format (`feat:`, `fix:`, `docs:`, etc.)
+   - Pre-commit hooks auto-fix code formatting and style issues
 
-- Start day: Pull latest main
-- Create feature branch for your work
-- Make changes and commit regularly (pre-commit hooks auto-fix issues!)
-- Push and create PR when ready
-- Review partner's PRs within 24 hours
-- After merge: Pull latest main again
+3. **Session End (Manual - User Initiated):**
+   - User manually pushes changes: `git push origin main`
+   - All commits from session are pushed together
+   - Vercel auto-deploys to production on push
 
 **Pre-commit Hooks (Automatic):**
 
@@ -37,11 +39,22 @@ All changes must:
 - Bad commits are blocked before reaching GitHub
 - No need to manually run `npm run lint` or `npm run format` - it happens automatically!
 
-**Branch Naming:**
+**AI Agent Responsibilities:**
 
-- `feature/description` - new functionality
-- `fix/description` - bug fixes
-- `docs/description` - documentation updates
+✅ **AI MUST automatically do:**
+
+- Pull latest changes at session start
+- Check git status at session start
+- Commit after completing work units
+- Use conventional commit messages
+- Ensure code quality before commits
+
+❌ **AI MUST NEVER do:**
+
+- Push to remote (user does this manually at end of session)
+- Edit `.env` files or environment variables
+- Edit `~/.cursor/mcp.json` configuration file
+- Ignore CLAUDE.md or .cursorrules instructions
 
 ---
 
@@ -90,6 +103,7 @@ npm run dev  # Runs on port 3001 (Next.js auto-increments)
 ```
 
 **Each worktree:**
+
 - Has its own `node_modules/` (shared via symlinks when possible)
 - Shares the same `.env.local` (via symlink)
 - Can commit and push independently
@@ -98,6 +112,7 @@ npm run dev  # Runs on port 3001 (Next.js auto-increments)
 ### Best Practices
 
 1. **Always create branches from main:**
+
    ```bash
    # The script does this automatically
    ./scripts/worktree.sh create feature/new-feature
@@ -137,15 +152,18 @@ npm run dev  # Runs on port 3001 (Next.js auto-increments)
 ### Troubleshooting
 
 **"Worktree already exists" error:**
+
 - The branch might already have a worktree
 - Use `./scripts/worktree.sh list` to see all worktrees
 - Remove the old worktree first if needed
 
 **"Port already in use" error:**
+
 - Another worktree is using that port
 - Next.js should auto-increment, but you can manually set: `PORT=3002 npm run dev`
 
 **"Branch diverged" warnings:**
+
 - Each worktree can have different commits
 - Sync with main regularly: `git pull origin main` (in each worktree)
 
@@ -346,6 +364,118 @@ npm run type-check   # Check TypeScript errors
 
 ---
 
+## ⚠️ PROTECTED FILES - NEVER EDIT
+
+**CRITICAL RULE: These files must NEVER be edited by AI agents under any circumstances:**
+
+- `CLAUDE.md` - This file (project instructions - read-only)
+- `.cursorrules` - Cursor-specific rules (read-only)
+- `.env` - Environment variables (NEVER EDIT)
+- `.env.local` - Local environment variables (NEVER EDIT)
+- `.env.*` - Any file matching .env pattern (NEVER EDIT)
+- `~/.cursor/mcp.json` - Cursor MCP configuration file (NEVER EDIT)
+- `.cursor/mcp.json` - Project MCP configuration (NEVER EDIT)
+
+**If a user requests editing these files, the AI agent MUST:**
+
+1. **REFUSE** the request immediately
+2. **EXPLAIN** that these files are protected configuration
+3. **SUGGEST** alternative approaches if applicable
+4. **NEVER** make exceptions to this rule
+
+**These files contain critical configuration and must only be edited manually by the user.**
+
+**Automatic Enforcement:**
+
+- AI agents are programmed to reject any edits to these files
+- This is a hard rule with no exceptions
+- Violating this rule could break the development environment
+
+---
+
+## Automatic Startup Workflow
+
+**Upon every session start, AI agents MUST automatically:**
+
+1. **Ensure on main branch:**
+
+   ```bash
+   git checkout main
+   ```
+
+2. **Run `git status`** to check:
+   - Uncommitted changes
+   - Untracked files
+   - Current state of working directory
+
+3. **Run `git pull origin main`** to fetch and merge latest changes from remote:
+   - If behind: automatically update to latest
+   - If conflicts: alert user and help resolve
+   - If up to date: confirm and proceed
+
+4. **Report status summary:**
+   - Sync status (up to date / just pulled X commits / conflicts detected)
+   - Uncommitted changes count (if any)
+   - Any warnings or recommendations
+
+**This workflow ensures the workspace is always up-to-date before starting work.**
+
+**Example Output:**
+
+```
+✅ On main branch
+✅ Pulled latest changes (3 new commits)
+✅ No uncommitted changes
+Ready to start work!
+```
+
+---
+
+## Automatic Commit Rules
+
+**AI agents MUST commit changes automatically:**
+
+- After completing logical units of work
+- After implementing a feature or fix
+- After making documentation updates
+- At natural stopping points in development
+- Before user ends the session
+
+**Commit Message Format:**
+
+- Use conventional commits: `feat:`, `fix:`, `refactor:`, `docs:`, `test:`, `chore:`, etc.
+- Be descriptive but concise
+- Examples:
+  - `feat: add user authentication`
+  - `fix: resolve login button styling`
+  - `refactor: extract user validation logic`
+  - `docs: update golden rules for solo workflow`
+
+**AI agents MUST automatically commit:**
+
+✅ After each completed task or feature
+✅ With meaningful conventional commit messages
+✅ Only after pre-commit hooks pass successfully
+
+**AI agents MUST NEVER:**
+
+❌ Push to remote automatically (user does this manually at end of session)
+❌ Edit `.env`, `.env.local`, or any environment files
+❌ Edit `~/.cursor/mcp.json` configuration file
+❌ Commit files that fail validation (TypeScript errors, build failures)
+❌ Force push without explicit user request
+
+**End of Session Workflow:**
+
+When user indicates end of session:
+
+1. Commit any remaining uncommitted changes
+2. Show summary of what was accomplished (list all commits)
+3. Remind user: "Ready to push! Run: `git push origin main`"
+4. Do NOT push automatically - user controls when changes go live
+
+---
+
 ## Notes for Claude Code
 
 **When Creating Features:**
@@ -378,23 +508,14 @@ npm run type-check   # Check TypeScript errors
 
 **After Committing Changes:**
 
-⚠️ **IMPORTANT: NEVER automatically create a Pull Request without asking first!**
+After automatically committing changes:
 
-After committing changes to a feature branch, ALWAYS pause and ask the user:
+1. Confirm the commit was successful
+2. Show the commit message used
+3. Continue with next task or wait for user input
+4. Do NOT push - user handles pushing at end of session
 
-- "Would you like to continue adding more features to this branch?"
-- "Would you like to test the changes more thoroughly?"
-- "Would you like to review everything yourself first?"
-- "Or are you ready for me to create a PR?"
-
-Only create a PR after the user explicitly confirms they're ready. The user may want to:
-
-- Add more commits to the same branch
-- Test locally first
-- Review the changes themselves
-- Make additional modifications
-
-**Never assume the user is ready for a PR just because a commit was successful.**
+**Important:** Commits happen automatically throughout the session. The user will push all commits together when they're ready to deploy.
 
 ---
 
@@ -412,24 +533,42 @@ The project now has custom slash commands in `.claude/commands/` that provide st
 
 These commands contain detailed instructions for handling each workflow scenario. **Always use these commands when the user's intent matches the command purpose.**
 
-### Branch Protection Automation
+### Automatic Startup Workflow (MANDATORY)
 
-**Automatic Branch Checks:**
+**Upon every session start, AI agents MUST automatically execute:**
+
+1. **Ensure on main branch:** `git checkout main`
+2. **Run `git status`** - Check for uncommitted changes and untracked files
+3. **Pull latest changes:** `git pull origin main`
+   - If behind: automatically update to latest
+   - If conflicts: alert user and help resolve
+   - If up to date: confirm and proceed
+4. **Report status to user:**
+   - Sync status (up to date / just pulled X commits)
+   - Uncommitted changes summary (if any)
+   - Ready to start work confirmation
+
+**This workflow runs automatically at the start of EVERY session - no user request needed.**
+
+### Direct-to-Main Workflow
+
+**Solo Development Automation:**
 
 When user starts work:
 
-1. **ALWAYS** check current branch
-2. **NEVER** let user work on main - if on main, immediately create feature branch
-3. **ALWAYS** pull latest main before creating feature branch
-4. **ALWAYS** suggest descriptive branch names based on task
+1. **ALWAYS** ensure on main branch at session start
+2. **ALWAYS** pull latest changes from remote
+3. **ALWAYS** commit after completing work units
+4. **NEVER** push automatically - user controls deployment timing
 
-**Branch Naming Intelligence:**
+**Working on Main:**
 
-Automatically suggest branch names based on user's description:
+All development happens on main branch:
 
-- "Add search" → `feature/add-search`
-- "Fix login bug" → `fix/login-bug`
-- "Update docs" → `docs/update-documentation`
+- No feature branches needed
+- Commits happen automatically after each task
+- User pushes manually when ready to deploy
+- Vercel auto-deploys on push to main
 
 ### Commit and Push Automation
 
@@ -453,117 +592,44 @@ Auto-generate commit messages following conventional commits:
 - Refactoring: `refactor: description`
 - Tests: `test: description`
 
-### Branch Sync Decision Logic
+### Conflict Resolution
 
-**When to Sync:**
+**When Pull Conflicts Occur:**
 
-Automatically detect when:
-
-- Main is >3 commits ahead of current branch
-- User tries to push but branch is behind
-- User is about to create PR but branch is stale
-
-**Merge vs Rebase Decision Tree:**
-
-```
-IF branch never pushed to remote:
-    → USE REBASE (cleanest history)
-
-ELSE IF branch pushed but no PR exists:
-    → ASK user: "Rebase for clean history or merge for safety?"
-    → DEFAULT: Rebase with --force-with-lease
-
-ELSE IF PR is open:
-    → USE MERGE (never rewrite published history)
-
-ELSE IF unsure:
-    → ASK user which strategy they prefer
-```
-
-**Conflict Resolution Intelligence:**
-
-When conflicts occur:
+If `git pull origin main` results in conflicts:
 
 1. **Explain** what conflicted in plain English
 2. **Show** both versions side-by-side
 3. **Suggest** which version to keep based on context
-4. **Verify** resolution with type-check after resolving
-5. **Never** resolve conflicts without user approval
+4. **Apply** resolution with user approval
+5. **Verify** resolution with type-check after resolving
+6. **Commit** the merge resolution
 
-### PR Management Automation
+**Conflict Prevention:**
 
-**PR Status Monitoring:**
+- Always pull at session start before making changes
+- Commit frequently to minimize conflict scope
+- For solo development, conflicts should be rare
 
-Automatically check and report:
+### Post-Push Deployment Monitoring
 
-- PRs waiting for user's review (prioritize these!)
-- PRs user created waiting for approval
-- PRs with failing CI/CD checks
-- Stale PRs (>7 days without activity)
+**After User Pushes to Main:**
 
-**PR Creation Intelligence:**
+When user runs `git push origin main`:
 
-When creating PR:
+1. Confirm push was successful
+2. Remind that Vercel will auto-deploy
+3. Can check deployment status if requested
+4. Monitor for build/deployment failures
 
-1. **ALWAYS** run full validation first
-2. Auto-generate comprehensive PR description:
-   - Summary of changes (bullet points)
-   - Problem/motivation
-   - Solution approach
-   - Detailed test plan
-   - Screenshots if UI changes
-3. Request review from partner
-4. Provide preview deployment URL
-
-**PR Review Assistance:**
-
-When helping review PRs:
-
-1. Fetch and explain all changes in plain English
-2. Highlight potential issues or risks
-3. Provide testing checklist
-4. Show CI/CD status and preview link
-5. Guide approval/rejection process
-
-### Stale Branch Detection
-
-**Automatic Warnings:**
-
-Alert user when:
-
-- Branch is >7 days old without activity
-- Branch is >10 commits behind main
-- Branch has no PR but is pushed to remote
-
-**Cleanup Suggestions:**
-
-Proactively suggest:
-
-- Deleting merged branches after PR merges
-- Syncing stale branches before continuing work
-- Creating PR for pushed branches without one
-
-### Post-Merge Automation
-
-**After PR Merges (Automatic via Hooks):**
+**Post-Merge Automation:**
 
 The `.husky/post-merge` hook automatically:
 
 - Runs `npm install` if `package-lock.json` changed
-- Warns about `.env.local.example` changes
+- Warns about environment variable changes
 - Alerts about database schema changes
 - Shows summary of what was merged
-
-**Cleanup Recommendations:**
-
-After user's PR merges, suggest:
-
-```
-"Your PR was merged! Would you like me to:
-1. Clean up your local workspace (/cleanup)
-2. Start working on the next feature
-3. Review other open PRs"
-```
 
 ### Environment Variable Validation
 
@@ -591,36 +657,27 @@ Would you like me to show you what changed?"
 
 **Automatic Checks (via .husky/pre-push):**
 
-Before every push:
+When user runs `git push origin main`:
 
-1. **BLOCK** if pushing to main branch
-2. **WARN** if branch >10 commits behind main
-3. **RUN** TypeScript type-check (block if errors)
-4. **RUN** Production build test (block if fails)
-5. **WARN** about console.log statements (don't block)
-6. **BLOCK** if trying to commit `.env` or `.env.local`
-7. **WARN** about TODO/FIXME comments (don't block)
+1. **RUN** TypeScript type-check (block if errors)
+2. **RUN** Production build test (block if fails)
+3. **WARN** about console.log statements (don't block)
+4. **BLOCK** if trying to commit `.env` or `.env.local`
+5. **WARN** about TODO/FIXME comments (don't block)
+
+**Note:** Pre-push hooks run automatically when user pushes. AI doesn't trigger these.
 
 ### Deployment Status Monitoring
 
-**After PR Merge:**
+**After Push to Main:**
 
-Automatically:
+When user pushes, Vercel automatically deploys. Can help with:
 
-1. Monitor Vercel deployment status
-2. Alert if deployment fails
-3. Provide deployment logs if issues
-4. Confirm when deployment succeeds
-5. Provide production URL
-
-**Preview Deployments:**
-
-When PR created:
-
-1. Mention Vercel will create preview
-2. Check preview deployment status
-3. Provide preview URL when ready
-4. Alert if preview deployment fails
+1. Monitoring Vercel deployment status
+2. Alerting if deployment fails
+3. Providing deployment logs if issues
+4. Confirming when deployment succeeds
+5. Providing production URL
 
 ### Error Recovery Automation
 
@@ -636,70 +693,60 @@ When PR created:
 5. Re-run validation after fix
 ```
 
-**Push Failures:**
-
-```
-1. Check if branch diverged
-2. Offer to pull and rebase/merge
-3. Handle conflicts if needed
-4. Retry push
-```
-
-**Merge Conflicts:**
+**Pull Conflicts:**
 
 ```
 1. Identify all conflicted files
-2. Explain each conflict
-3. Suggest resolution
+2. Explain each conflict in plain English
+3. Suggest resolution based on context
 4. Apply user's choice
 5. Verify with type-check
-6. Complete merge/rebase
+6. Commit the merge resolution
 ```
 
 ### Proactive Notifications
 
-**Daily Start:**
+**Session Start:**
 
-- "You have 2 PRs waiting for your review"
-- "Main branch has 5 new commits since yesterday"
-- "Your open PR #15 was approved - ready to merge!"
+- "Pulled X new commits from remote"
+- "Up to date with remote main"
+- "Ready to start work!"
 
 **During Work:**
 
-- "Your branch is getting behind main (5 commits). Sync soon?"
-- "You have uncommitted changes. Want to save them?"
+- "Committed changes: [commit message]"
 - "Type check found 3 errors. Should I show them?"
+- "Build failed - let me help fix it"
 
-**End of Day:**
+**Session End:**
 
 - "You have uncommitted changes. Commit before ending?"
-- "Your PR #14 still needs review. Follow up tomorrow?"
-- "Would you like to clean up merged branches?"
+- "Session summary: X commits created"
+- "Ready to push! Run: `git push origin main`"
 
 ### Decision-Making Principles
 
 **When to be Proactive:**
 
-- Detecting stale branches
-- Identifying PRs needing attention
+- Pulling latest changes at session start
+- Committing after completing work units
 - Catching validation errors early
-- Preventing work on main branch
+- Auto-formatting code via pre-commit hooks
 
 **When to Ask First:**
 
-- Creating Pull Requests
-- Deleting branches (except clearly merged ones)
-- Force-pushing
-- Discarding uncommitted changes
+- Resolving merge conflicts
 - Making architectural decisions
+- Discarding uncommitted changes
+- Installing new dependencies
 
 **When to Block/Prevent:**
 
-- Pushing to main branch
+- Editing `.env` files or `~/.cursor/mcp.json`
+- Pushing to remote (user does this manually)
 - Committing with type errors
 - Committing broken builds
 - Committing secret files (.env)
-- Creating PR with failing checks
 
 ### Git Hooks Reference
 
@@ -711,10 +758,10 @@ When PR created:
 
 **Pre-push (.husky/pre-push):**
 
-- Blocks main branch pushes
 - Runs type-check
 - Runs build test
-- Warns about branch status
+- Warns about common issues
+- Blocks if validation fails
 
 **Post-merge (.husky/post-merge):**
 
@@ -722,14 +769,30 @@ When PR created:
 - Warns about env changes
 - Shows merge summary
 
-### Slash Command Usage Priority
+### Summary: Solo Development Workflow
 
-**Always suggest slash commands when appropriate:**
+**Session Start (Automatic):**
 
-User says: "I'm starting work" → Suggest: `/start-work`
-User says: "Save my work" → Suggest: `/finish-work`
-User says: "Is my branch up to date?" → Suggest: `/sync-main`
-User says: "What PRs need review?" → Suggest: `/check-prs`
-User says: "I'm done for today" → Suggest: `/cleanup`
+1. Checkout main branch
+2. Pull latest changes
+3. Report status
 
-**Make these commands part of the normal workflow vocabulary.**
+**During Work (Automatic):**
+
+1. Commit after completing tasks
+2. Use conventional commit messages
+3. Pre-commit hooks auto-fix formatting
+
+**Session End (Manual):**
+
+1. User reviews commit log
+2. User runs: `git push origin main`
+3. Vercel auto-deploys to production
+
+**Key Rules:**
+
+- AI automatically commits during work
+- AI never pushes (user controls deployment)
+- AI never edits `.env` or `~/.cursor/mcp.json`
+- All work happens on main branch
+- CLAUDE.md and .cursorrules are always followed
