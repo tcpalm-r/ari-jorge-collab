@@ -27,9 +27,7 @@ export function Sidebar() {
   return (
     <aside className="w-[200px] h-screen bg-[#0f0f0f] border-r border-[#2a2a2a] fixed left-0 top-0 flex flex-col">
       {/* Logo/Header */}
-      <div className="h-16 border-b border-[#2a2a2a] flex items-center px-4">
-        <h1 className="text-lg font-semibold text-white">Dashboard</h1>
-      </div>
+      <div className="h-16 border-b border-[#2a2a2a] flex items-center px-4"></div>
 
       {/* Navigation Tabs */}
       <nav className="flex-1 py-4">
