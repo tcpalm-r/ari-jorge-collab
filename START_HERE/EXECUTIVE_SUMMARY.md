@@ -34,7 +34,7 @@ This template provides a complete framework for **safe, AI-assisted collaboratio
 The framework combines three key elements:
 
 1. **AI Assistance (Claude Code)** - Natural language interface to development tasks
-2. **Safety Mechanisms** - Branch protection, pre-commit hooks, and automated testing
+2. **Safety Mechanisms** - Pre-commit hooks, automated testing, and GitHub Actions CI/CD
 3. **Clear Workflows** - Step-by-step guides designed for non-technical users
 
 ---
@@ -51,8 +51,8 @@ The framework combines three key elements:
 ### Technical Infrastructure (Handled Automatically)
 
 - **Modern Tech Stack** - Next.js 14, TypeScript, Supabase database, Vercel hosting
-- **CI/CD Pipeline** - Automatic deployments via GitHub Actions
-- **Branch Protection** - Impossible to break production; all changes require pull requests
+- **CI/CD Pipeline** - Automatic deployments via GitHub Actions on push to main
+- **Direct-to-Main Workflow** - Simplified solo development workflow
 - **Production Monitoring** - Built-in error tracking and performance monitoring
 
 ### Example Application Included
@@ -88,17 +88,16 @@ No coding experience required. If you can communicate what you want in plain Eng
 The template is battle-tested and includes:
 
 - ✓ Working example application (Employee Directory)
-- ✓ Complete documentation for non-technical users
+- ✓ Complete documentation for developers
 - ✓ Deployed to production with automatic CI/CD
 - ✓ Database integration configured and tested
-- ✓ Branch protection and safety mechanisms active
 - ✓ Pre-commit hooks enforcing code quality
 - ✓ AI agent configurations optimized
 
 **Recent Milestones:**
 
 - Migrated to GitHub Actions for enterprise-grade CI/CD
-- Added comprehensive PR workflow guide for non-technical collaborators
+- Implemented direct-to-main workflow for solo development
 - Implemented automated deployment verification
 - Created AI agent configurations for consistent behavior
 
@@ -129,7 +128,7 @@ The template is battle-tested and includes:
 **Lower Risk**
 
 - Built-in safety mechanisms prevent breaking production
-- All changes reviewed before merging
+- Pre-commit hooks ensure code quality before commits
 - Automatic testing catches issues early
 
 ### Long-Term Strategic Value
@@ -146,7 +145,7 @@ The template is battle-tested and includes:
 **Architecture:**
 
 ```
-GitHub (Version Control) → Vercel (Hosting) → Supabase (Database)
+GitHub (main) → GitHub Actions (CI/CD) → Vercel (deploy) → Supabase (Database)
 ```
 
 **Tech Stack:**
@@ -154,7 +153,7 @@ GitHub (Version Control) → Vercel (Hosting) → Supabase (Database)
 - Frontend: Next.js 14, React, TypeScript
 - Styling: Tailwind CSS
 - Database: Supabase (PostgreSQL)
-- Hosting: Vercel with automatic deployments
+- Hosting: Vercel (deployed via GitHub Actions)
 - AI: Claude Code with Model Context Protocol (MCP)
 
 **Cost:** Runs on free tiers for all services during development; scales to paid plans as needed.
@@ -174,10 +173,10 @@ Example workflow:
 ```
 You: "Add a contact form to the homepage with name, email, and message fields"
 Claude: [Creates form component, adds database table, implements validation]
-You: "Create a pull request"
-Claude: [Creates PR with summary of changes]
-Your teammate: [Reviews and approves]
-System: [Automatically deploys to production]
+Claude: [Automatically commits changes]
+You: "Push my changes"
+You: git push origin main
+System: [GitHub Actions automatically deploys to production]
 ```
 
 ---
@@ -187,7 +186,7 @@ System: [Automatically deploys to production]
 ### For Evaluators (Your CEO)
 
 1. **Try the Live Demo** - Visit [https://ari-jorge-collab.vercel.app](https://ari-jorge-collab.vercel.app)
-2. **Review the Workflow** - Read USER_GUIDE.md to see how non-technical collaboration works
+2. **Review the Workflow** - Read CLAUDE.md to see how AI-assisted development works
 3. **Explore the Repository** - See the documentation and code organization
 4. **Ask Questions** - Reach out to the team with any questions
 
@@ -201,7 +200,7 @@ System: [Automatically deploys to production]
 ### For Contributors (Improving This Template)
 
 1. **Open Issues** - Suggest improvements or report bugs
-2. **Submit PRs** - Contribute documentation or code examples
+2. **Contribute** - Make changes directly on main branch
 3. **Share Experiences** - Help others learn from your successes (and mistakes!)
 
 ---
@@ -219,11 +218,11 @@ System: [Automatically deploys to production]
 
 This framework has demonstrated success when:
 
-- Non-technical team members successfully create and merge features
+- Developers successfully create and deploy features using AI assistance
 - Development velocity increases without sacrificing code quality
 - Team members report feeling confident participating in development
-- Communication between technical and non-technical stakeholders improves
 - Time from "idea" to "deployed feature" decreases
+- Code quality remains high through automated checks
 
 ---
 

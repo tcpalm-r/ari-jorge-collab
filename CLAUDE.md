@@ -29,7 +29,7 @@ This project uses a simplified workflow for solo development. All work happens d
 3. **Session End (Manual - User Initiated):**
    - User manually pushes changes: `git push origin main`
    - All commits from session are pushed together
-   - Vercel auto-deploys to production on push
+   - GitHub Actions auto-deploys to production on push
 
 **Pre-commit Hooks (Automatic):**
 
@@ -58,117 +58,6 @@ This project uses a simplified workflow for solo development. All work happens d
 
 ---
 
-## Git Worktrees (Parallel Agent Work)
-
-**Git worktrees allow you to work on multiple branches simultaneously in separate directories.** This is perfect for running multiple AI agents at the same time, each working on different features.
-
-### Quick Start
-
-```bash
-# Create a new worktree for a feature branch
-./scripts/worktree.sh create feature/my-new-feature
-
-# List all worktrees
-./scripts/worktree.sh list
-
-# Remove a worktree (keeps the branch)
-./scripts/worktree.sh remove feature/my-new-feature
-```
-
-### How It Works
-
-1. **Main Repository**: Your main workspace (current directory)
-2. **Worktrees Directory**: All additional worktrees are created in `worktrees/`
-3. **Independent Development**: Each worktree can:
-   - Run its own dev server (`npm run dev`)
-   - Have its own terminal sessions
-   - Be opened in separate Cursor/VS Code windows
-   - Run different AI agents simultaneously
-
-### Workflow for Multiple Agents
-
-**Scenario: Running 2 agents in parallel**
-
-```bash
-# Agent 1: Working on feature A (in main workspace)
-cd "/Users/thomas.palmer/Documents/Ari and Jorge Starter"
-git checkout feature/feature-a
-npm run dev  # Runs on port 3000
-
-# Agent 2: Working on feature B (in worktree)
-./scripts/worktree.sh create feature/feature-b
-cd worktrees/feature/feature-b
-npm install  # First time only
-npm run dev  # Runs on port 3001 (Next.js auto-increments)
-```
-
-**Each worktree:**
-
-- Has its own `node_modules/` (shared via symlinks when possible)
-- Shares the same `.env.local` (via symlink)
-- Can commit and push independently
-- Follows all the same Golden Rules (feature branches, PRs, etc.)
-
-### Best Practices
-
-1. **Always create branches from main:**
-
-   ```bash
-   # The script does this automatically
-   ./scripts/worktree.sh create feature/new-feature
-   ```
-
-2. **Keep worktrees organized:**
-   - All worktrees go in `worktrees/` directory
-   - Use descriptive branch names
-   - Remove worktrees when done: `./scripts/worktree.sh remove feature/name`
-
-3. **Environment Variables:**
-   - `.env.local` is automatically symlinked from main repo
-   - Changes in one worktree affect all (by design - shared config)
-
-4. **Port Conflicts:**
-   - Next.js automatically increments ports (3000, 3001, 3002, etc.)
-   - Each worktree can run its own dev server
-
-5. **Git Operations:**
-   - Commits in any worktree affect the same repository
-   - Push/pull from any worktree works normally
-   - All worktrees share the same `.git` directory
-
-### Managing Worktrees
-
-```bash
-# List all worktrees
-./scripts/worktree.sh list
-
-# Remove a worktree (doesn't delete the branch)
-./scripts/worktree.sh remove feature/old-feature
-
-# Clean up stale references
-./scripts/worktree.sh prune
-```
-
-### Troubleshooting
-
-**"Worktree already exists" error:**
-
-- The branch might already have a worktree
-- Use `./scripts/worktree.sh list` to see all worktrees
-- Remove the old worktree first if needed
-
-**"Port already in use" error:**
-
-- Another worktree is using that port
-- Next.js should auto-increment, but you can manually set: `PORT=3002 npm run dev`
-
-**"Branch diverged" warnings:**
-
-- Each worktree can have different commits
-- Sync with main regularly: `git pull origin main` (in each worktree)
-
----
-
 ## Tech Stack
 
 **Frontend & Backend:**
@@ -185,16 +74,16 @@ npm run dev  # Runs on port 3001 (Next.js auto-increments)
 **Hosting & Deployment:**
 
 - Vercel for production hosting
-- Automatic deployments when main branch updates
-- Preview deployments for every PR
+- GitHub Actions handles all deployments automatically
+- Deploys to production when main branch is pushed
 
 **Connection Flow:**
 
 ```
-GitHub (main) → Vercel (auto-deploy) → Supabase (database)
+GitHub (main) → GitHub Actions (CI/CD) → Vercel (deploy) → Supabase (database)
 ```
 
-**Environment Variables (in Vercel):**
+**Environment Variables (configured in GitHub Actions/Vercel):**
 
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
@@ -207,11 +96,9 @@ GitHub (main) → Vercel (auto-deploy) → Supabase (database)
 **GitHub MCP:**
 
 ```
-"Create a PR for this branch"
-"Show me all open pull requests"
-"Check PR status for [branch-name]"
-"Merge this approved PR"
+"Show me recent commits"
 "What branches exist?"
+"Show me the commit history"
 ```
 
 **Supabase MCP:**
@@ -226,20 +113,11 @@ GitHub (main) → Vercel (auto-deploy) → Supabase (database)
 **General Claude Code Commands:**
 
 ```
-"Pull the latest main into my branch"
 "Commit these changes with message: [description]"
 "Run the development server"
 "Run tests"
 "Check for TypeScript errors"
-```
-
-**Vercel CLI (use terminal commands):**
-
-```bash
-vercel              # Deploy to preview
-vercel --prod       # Deploy to production
-vercel logs         # View deployment logs
-vercel ls           # List deployments
+"Show me git status"
 ```
 
 ---
@@ -252,7 +130,6 @@ vercel ls           # List deployments
 # Claude will do this for you, but these are the actual commands:
 git checkout main
 git pull origin main
-git checkout -b feature/my-feature-name
 ```
 
 **Development:**
@@ -321,7 +198,7 @@ npm run type-check   # Check TypeScript errors
 **Merge Conflicts:**
 
 1. Ask Claude: "Help me resolve these merge conflicts"
-2. Always pull latest main before creating PR
+2. Always pull latest main before making changes
 3. Review conflicted files carefully
 4. Test after resolving conflicts
 
@@ -374,7 +251,7 @@ npm run type-check   # Check TypeScript errors
 - `.env.local` - Local environment variables (NEVER EDIT)
 - `.env.*` - Any file matching .env pattern (NEVER EDIT)
 - `~/.cursor/mcp.json` - Cursor MCP configuration file (NEVER EDIT)
-- `.cursor/mcp.json` - Project MCP configuration (NEVER EDIT)
+- `.cursor/.env.mcp` - Project-specific MCP environment configuration (NEVER EDIT)
 
 **If a user requests editing these files, the AI agent MUST:**
 
@@ -513,7 +390,7 @@ When user indicates end of session:
 - Create migrations for schema changes
 - Test queries with different user permissions
 
-**Before Merging:**
+**Before Pushing:**
 
 - Run build locally: `npm run build`
 - Check TypeScript: `npm run type-check`
@@ -540,9 +417,7 @@ After automatically committing changes:
 The project now has custom slash commands in `.claude/commands/` that provide streamlined workflows:
 
 - **`/start-work`** - Complete workday setup workflow
-- **`/finish-work`** - Commit, push, and optional PR creation
-- **`/sync-main`** - Intelligent branch syncing with main
-- **`/check-prs`** - Review and manage pull requests
+- **`/finish-work`** - Commit changes and prepare for push
 - **`/cleanup`** - End-of-day workspace cleanup
 
 These commands contain detailed instructions for handling each workflow scenario. **Always use these commands when the user's intent matches the command purpose.**
@@ -632,7 +507,7 @@ If `git pull origin main` results in conflicts:
 When user runs `git push origin main`:
 
 1. Confirm push was successful
-2. Remind that Vercel will auto-deploy
+2. Remind that GitHub Actions will auto-deploy
 3. Can check deployment status if requested
 4. Monitor for build/deployment failures
 
@@ -643,7 +518,7 @@ The `.husky/post-merge` hook automatically:
 - Runs `npm install` if `package-lock.json` changed
 - Warns about environment variable changes
 - Alerts about database schema changes
-- Shows summary of what was merged
+- Shows summary of what was pulled
 
 ### Environment Variable Validation
 
@@ -685,9 +560,9 @@ When user runs `git push origin main`:
 
 **After Push to Main:**
 
-When user pushes, Vercel automatically deploys. Can help with:
+When user pushes, GitHub Actions automatically deploys. Can help with:
 
-1. Monitoring Vercel deployment status
+1. Monitoring GitHub Actions deployment status
 2. Alerting if deployment fails
 3. Providing deployment logs if issues
 4. Confirming when deployment succeeds
@@ -801,7 +676,7 @@ When user pushes, Vercel automatically deploys. Can help with:
 
 1. User reviews commit log
 2. User runs: `git push origin main`
-3. Vercel auto-deploys to production
+3. GitHub Actions auto-deploys to production
 
 **Key Rules:**
 

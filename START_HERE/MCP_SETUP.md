@@ -6,9 +6,9 @@ Model Context Protocol (MCP) allows Claude Code to interact with external servic
 
 **Instead of running technical commands, you can just ask:**
 
-- "Show me all open pull requests"
+- "Show me recent commits"
 - "Query the users table in Supabase"
-- "Create a new branch for my feature"
+- "Show me the commit history"
 
 ---
 
@@ -69,9 +69,9 @@ After the script completes:
 
 Try asking Claude Code:
 
-- "Show me all open pull requests on GitHub"
+- "Show me recent commits on GitHub"
 - "Show me the database tables in Supabase"
-- "Create a new feature branch"
+- "Show me the commit history"
 
 ---
 
@@ -82,9 +82,9 @@ The project includes two MCP servers (both hosted remotely):
 ### 1. **GitHub MCP** (Remote)
 
 - **URL:** `https://api.githubcopilot.com/mcp/`
-- **Purpose:** Manages repositories, pull requests, issues, and workflows
+- **Purpose:** Manages repositories, commits, and workflows
 - **Authentication:** Your GitHub Personal Access Token
-- **Example commands:** "Show me all open PRs", "Create a feature branch"
+- **Example commands:** "Show me recent commits", "Show me the commit history"
 
 ### 2. **Supabase MCP** (Remote)
 
@@ -95,7 +95,7 @@ The project includes two MCP servers (both hosted remotely):
 
 ### Note on Vercel
 
-Vercel MCP has been intentionally excluded due to security concerns (API tokens provide excessive permissions). Use the Vercel CLI (`vercel` command) or Vercel dashboard for deployment operations instead.
+Vercel MCP has been intentionally excluded due to security concerns (API tokens provide excessive permissions). Deployment is handled automatically by GitHub Actions when you push to main.
 
 ---
 

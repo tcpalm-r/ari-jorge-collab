@@ -10,11 +10,6 @@ Next.js 14 collaborative development starter with full AI integration through Cl
 
 ### Quick Links:
 
-**For Non-Technical Users:**
-
-- 📖 **[START_HERE/USER_GUIDE.md](./START_HERE/USER_GUIDE.md)** - Complete guide for working with Claude Code (no Git knowledge required!)
-- 📊 **[START_HERE/WORKFLOW_DIAGRAM.md](./START_HERE/WORKFLOW_DIAGRAM.md)** - Visual workflow diagrams
-
 **For Developers & Setup:**
 
 - 📘 **[START_HERE/README.md](./START_HERE/README.md)** - Full setup guide, tech stack, and quick start
@@ -24,7 +19,6 @@ Next.js 14 collaborative development starter with full AI integration through Cl
 **Technical Reference:**
 
 - 📘 **[CLAUDE.md](./CLAUDE.md)** - Complete technical guide with automated workflows
-- 🎯 **[AGENTS.md](./AGENTS.md)** - Agent configuration reference
 
 ---
 
@@ -40,15 +34,15 @@ cd ari-jorge-collab
 # 3. See START_HERE/ folder for detailed setup instructions
 ```
 
-**👉 New to the project? Start with [START_HERE/USER_GUIDE.md](./START_HERE/USER_GUIDE.md)**
+**👉 New to the project? Start with [START_HERE/README.md](./START_HERE/README.md)**
 
 ---
 
 ## 🔗 Important Links
 
 - **GitHub Repo:** https://github.com/tcpalm-r/ari-jorge-collab
+- **GitHub Actions (CI/CD):** https://github.com/tcpalm-r/ari-jorge-collab/actions
 - **Production Site:** https://ari-jorge-collab.vercel.app
-- **Vercel Dashboard:** https://vercel.com/dashboard
 - **Supabase Dashboard:** https://app.supabase.com/project/kjfizpagyleefuucsdbu
 
 ---
@@ -58,14 +52,12 @@ cd ari-jorge-collab
 Work faster with Claude Code using these commands:
 
 ```bash
-/start-work    # Start your workday with fresh code
-/finish-work   # Save work and optionally create PR
-/sync-main     # Keep branch up-to-date with main
-/check-prs     # Review pull requests
+/start-work    # Start your workday with fresh code (ensures on main, pulls latest)
+/finish-work   # Commit changes and prepare for push
 /cleanup       # Clean up workspace at end of day
 ```
 
-See [START_HERE/USER_GUIDE.md](./START_HERE/USER_GUIDE.md) for complete instructions.
+See [CLAUDE.md](./CLAUDE.md) for complete workflow instructions.
 
 ---
 

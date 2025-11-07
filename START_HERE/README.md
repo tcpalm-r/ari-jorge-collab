@@ -8,15 +8,12 @@ Next.js 14 collaborative development starter with full AI integration through Cl
 
 **START HERE:**
 
-- 👤 **[USER_GUIDE.md](./USER_GUIDE.md)** - **Non-technical users start here!** Complete guide for working with Claude Code, GitHub, and PRs without knowing Git commands.
-- 📊 **[WORKFLOW_DIAGRAM.md](./WORKFLOW_DIAGRAM.md)** - Visual workflow diagrams and decision trees
 - 🔧 **[MCP_SETUP.md](./MCP_SETUP.md)** - MCP server setup and troubleshooting
 - 📋 **[EXECUTIVE_SUMMARY.md](./EXECUTIVE_SUMMARY.md)** - Project overview and summary
 
 **For Developers:**
 
 - 📘 **[CLAUDE.md](../CLAUDE.md)** - Complete technical guide, automated workflows, coding standards
-- 🎯 **[AGENTS.md](../AGENTS.md)** - Agent configuration reference
 
 ---
 
@@ -73,7 +70,7 @@ Navigate to http://localhost:3000 - you should see the app running!
 
 In Cursor, try asking Claude:
 
-- "Show me all open pull requests"
+- "Show me recent commits"
 - "Show me the Supabase database schema"
 - "What's on the employee directory page?"
 
@@ -87,12 +84,11 @@ In Cursor, try asking Claude:
 
 ## Repository Status
 
-- **Visibility:** Public (enables free branch protection)
-- **Branch Protection:** ✅ Enabled on `main`
-  - Direct pushes to `main` are blocked
-  - All changes require Pull Requests with 1 approval
-  - CI checks must pass before merging
-  - Protection enforced for all team members (including admins)
+- **Workflow:** Direct-to-main development
+  - All work happens directly on `main` branch
+  - AI commits automatically after completing work units
+  - User pushes manually when ready to deploy
+  - GitHub Actions auto-deploys on push to main
 - **Pre-commit Hooks:** ✅ Automatic code quality checks
   - Prettier auto-formats code (spacing, quotes, etc.)
   - ESLint auto-fixes code style issues
@@ -113,31 +109,27 @@ npm run type-check   # Check TypeScript errors
 
 **See the comprehensive [Documentation section](#-documentation) at the top of this README.**
 
-**Golden Rule:** Never work directly on the `main` branch. Always create a feature branch, get PR approval, then merge.
+**Golden Rule:** Work directly on the `main` branch. AI commits automatically, you push manually when ready to deploy.
 
 **Automated Workflows:**
 
-- Use `/start-work` to begin your workday
-- Use `/finish-work` to save and optionally create PR
-- Use `/sync-main` to keep branch up-to-date
-- Use `/check-prs` to review pull requests
+- Use `/start-work` to begin your workday (AI ensures on main, pulls latest)
+- Use `/finish-work` to commit changes and prepare for push
 - Use `/cleanup` to clean up workspace
 
-See [USER_GUIDE.md](./USER_GUIDE.md) for complete workflow instructions.
+See [CLAUDE.md](../CLAUDE.md) for complete workflow instructions.
 
 ## Getting Help
 
 1. **Ask Claude Code** - Your AI pair programmer (works best with MCP enabled!)
-2. **Check [USER_GUIDE.md](./USER_GUIDE.md)** - Non-technical user guide
-3. **Check [CLAUDE.md](../CLAUDE.md)** - Comprehensive technical guide
-4. **Check [MCP_SETUP.md](./MCP_SETUP.md)** - If having issues with GitHub/Vercel/Supabase commands
-5. **Ask your teammate** - Collaboration is key!
+2. **Check [CLAUDE.md](../CLAUDE.md)** - Comprehensive technical guide
+3. **Check [MCP_SETUP.md](./MCP_SETUP.md)** - If having issues with GitHub/Supabase commands
 
 ## Tech Stack
 
 - **Framework:** Next.js 14 with TypeScript
 - **Database:** Supabase (PostgreSQL)
-- **Hosting:** Vercel (auto-deploy from main branch)
+- **Hosting:** Vercel (deployed via GitHub Actions)
 - **Styling:** Tailwind CSS (with custom dark mode)
 - **AI Integration:** Claude Code with MCP servers for GitHub and Supabase
 
@@ -159,10 +151,9 @@ Once MCP is set up, you can ask Claude Code natural language questions:
 
 **GitHub:**
 
-- "Show me all open pull requests"
-- "Create a new branch called feature/my-feature"
+- "Show me recent commits"
 - "What files changed in the last commit?"
-- "Create a PR for this branch"
+- "Show me the commit history"
 
 **Supabase:**
 
@@ -171,9 +162,7 @@ Once MCP is set up, you can ask Claude Code natural language questions:
 - "Check database connection status"
 - "What tables exist in the database?"
 
-**Vercel (Use CLI or Dashboard):**
+**Deployment:**
 
-- Terminal: `vercel` - Deploy preview
-- Terminal: `vercel --prod` - Deploy to production
-- Terminal: `vercel logs` - View logs
-- Or ask Claude: "Help me check Vercel deployment status"
+- GitHub Actions automatically deploys when you push to main
+- Check deployment status in GitHub Actions dashboard

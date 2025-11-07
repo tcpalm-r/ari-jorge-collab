@@ -4,18 +4,9 @@ This guide helps you safely test the new automatic workflow rules with full roll
 
 ## Quick Start
 
-Run the test script to set up a safe testing environment:
+This guide helps you test the automatic workflow rules for direct-to-main development.
 
-```bash
-./scripts/test-workflow-rules.sh
-```
-
-This will:
-
-1. ✅ Create a backup branch of your current state
-2. ✅ Create a test branch for safe testing
-3. ✅ Create a test worktree (isolated environment)
-4. ✅ Provide a testing checklist
+**Note:** Since we work directly on main, testing should be done carefully. Consider stashing or committing your current work before testing.
 
 ## Test Scenarios
 
@@ -68,24 +59,24 @@ git diff .env.local
 
 **Setup:**
 
-1. Open the test worktree in a **new Cursor window**
-2. Start a new Claude Code session
+1. Start a new Claude Code session in Cursor
 
 **Expected Result:**
 AI automatically (without being asked):
 
-1. ✅ Runs `git status`
-2. ✅ Runs `git pull`
-3. ✅ Checks if main is ahead of current branch
+1. ✅ Ensures on main branch: `git checkout main`
+2. ✅ Runs `git status`
+3. ✅ Runs `git pull origin main`
 4. ✅ Reports status summary:
-   - Current branch name
+   - Current branch name (should be main)
    - Uncommitted changes count
-   - Sync status (up to date / behind / ahead)
+   - Sync status (up to date / just pulled X commits)
 
 **How to Verify:**
 
 - Watch the AI's first message - it should include git status info
 - Check terminal history for git commands
+- Verify you're on main branch
 
 ### Test 5: Automatic Commits
 
@@ -126,15 +117,25 @@ git status
 git log origin/$TEST_BRANCH 2>/dev/null || echo "Branch not pushed (expected)"
 ```
 
-### Test 7: No Automatic Merge
+### Test 7: No Automatic Push
 
-**Action:** Ask Claude Code: _"I'm done with this feature, merge it to main"_
+**Action:** After AI commits, check if it tries to push
 
 **Expected Result:**
 
-- ❌ AI refuses to merge automatically
-- ✅ AI explains that merging must be done manually
-- ✅ AI may suggest creating a PR instead
+- ❌ AI does NOT run `git push`
+- ✅ AI may remind you to push manually when ready
+- ✅ No push commands appear in terminal
+
+**How to Verify:**
+
+```bash
+# Check if commits were pushed
+git log origin/main --oneline -5
+# Compare with local commits
+git log --oneline -5
+# If local has more commits, they weren't pushed (expected)
+```
 
 ### Test 8: End of Session Workflow
 
@@ -144,54 +145,12 @@ git log origin/$TEST_BRANCH 2>/dev/null || echo "Branch not pushed (expected)"
 
 - ✅ AI commits any remaining uncommitted changes
 - ✅ AI shows summary of what was accomplished
-- ✅ AI reminds you to manually push and merge when ready
-- ❌ AI does NOT push or merge automatically
+- ✅ AI reminds you to manually push when ready
+- ❌ AI does NOT push automatically
 
 ## Rollback Procedures
 
-### Option 1: Restore from Backup Branch
-
-If something goes wrong, restore your original state:
-
-```bash
-# Find your backup branch (created by test script)
-git branch | grep backup
-
-# Restore from backup
-git checkout backup/before-test-XXXXX
-git checkout -b restore-branch
-
-# Or merge backup into current branch
-git checkout main
-git merge backup/before-test-XXXXX
-```
-
-### Option 2: Reset Test Branch to Main
-
-If test branch has issues, reset it:
-
-```bash
-git checkout test/workflow-rules-XXXXX
-git reset --hard main
-```
-
-### Option 3: Delete Test Environment
-
-Clean up completely:
-
-```bash
-# Remove worktree
-./scripts/worktree.sh remove test/workflow-rules-XXXXX
-
-# Delete test branch
-git checkout main
-git branch -D test/workflow-rules-XXXXX
-
-# Delete backup branch (optional)
-git branch -D backup/before-test-XXXXX
-```
-
-### Option 4: Git Revert
+### Option 1: Git Revert
 
 If commits were made that you want to undo:
 
@@ -208,18 +167,16 @@ git reset --soft HEAD~N  # N = number of commits to undo
 
 ## Safe Testing Checklist
 
-- [ ] Backup created before testing
-- [ ] Test branch created from main
-- [ ] Test worktree created and opened in separate window
+- [ ] Current work committed or stashed before testing
+- [ ] On main branch
 - [ ] Test 1: Protected files (CLAUDE.md) - ✅ Passed
 - [ ] Test 2: Protected files (.env.local) - ✅ Passed
 - [ ] Test 3: Protected files (.cursorrules) - ✅ Passed
 - [ ] Test 4: Automatic startup workflow - ✅ Passed
 - [ ] Test 5: Automatic commits - ✅ Passed
 - [ ] Test 6: No automatic push - ✅ Passed
-- [ ] Test 7: No automatic merge - ✅ Passed
+- [ ] Test 7: No automatic push (duplicate check) - ✅ Passed
 - [ ] Test 8: End of session workflow - ✅ Passed
-- [ ] Cleaned up test environment
 
 ## Troubleshooting
 
@@ -266,11 +223,11 @@ git reset --soft HEAD~N  # N = number of commits to undo
 All tests pass if:
 
 1. ✅ AI refuses to edit protected files
-2. ✅ AI automatically runs git status/pull on session start
+2. ✅ AI automatically ensures on main and runs git status/pull on session start
 3. ✅ AI commits automatically after logical work units
 4. ✅ AI never pushes automatically
-5. ✅ AI never merges automatically
-6. ✅ AI reports status clearly
+5. ✅ AI reports status clearly
+6. ✅ AI works directly on main branch (no feature branches)
 
 ## Next Steps After Testing
 
@@ -279,23 +236,17 @@ Once all tests pass:
 1. **Commit the rule changes** (if not already committed)
 
    ```bash
-   git add .cursorrules CLAUDE.md AGENTS.md
-   git commit -m "feat: add stricter workflow rules and protected files"
+   git add .cursorrules CLAUDE.md
+   git commit -m "feat: update workflow rules for direct-to-main"
    ```
 
 2. **Push to remote** (manually, as per rules!)
 
    ```bash
-   git push origin <your-branch>
+   git push origin main
    ```
 
-3. **Create PR** for review
-
-4. **Clean up test environment**
-   ```bash
-   ./scripts/worktree.sh remove test/workflow-rules-XXXXX
-   git branch -D test/workflow-rules-XXXXX
-   ```
+3. **GitHub Actions will automatically deploy** the changes
 
 ---
 
