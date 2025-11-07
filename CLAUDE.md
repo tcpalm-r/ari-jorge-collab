@@ -60,51 +60,46 @@ This project uses a simplified workflow for solo development. All work happens d
 
 **When user says: "fork and rename to [name]" or "fork and rename to [name], then push"**
 
-AI automatically handles the entire fork and rename process. No manual steps needed.
+AI automatically forks the repository on GitHub and handles the entire rename process. Zero manual steps needed.
 
 ### Automatic Name Normalization
 
-AI will automatically normalize the project name:
+AI will automatically normalize the project name for URLs and filenames:
+
+**For repository/package name (kebab-case):**
 
 - Convert to lowercase
 - Replace spaces with hyphens
 - Remove special characters (keep only alphanumeric and hyphens)
 - Examples:
   - "My Project" → "my-project"
+  - "Customer Portal" → "customer-portal"
   - "New App 2024!" → "new-app-2024"
-  - "client_portal" → "client-portal"
 
-### Automated Workflow Steps
+**For display titles (Title Case):**
+
+- Capitalize first letter of each major word
+- Examples:
+  - "my project" → "My Project"
+  - "customer portal" → "Customer Portal"
+  - "new app 2024" → "New App 2024"
+
+### Fully Automated Workflow Steps
 
 **AI automatically performs these steps in order:**
 
-1. **Normalize the project name** (as described above)
-2. **Get current GitHub username** from git remote URL
-3. **Check git status** - ensure working directory is clean
-4. **Update all project files:**
-   - `package.json` - Update `name` field
-   - `README.md` - Update title and GitHub URLs
-   - `CLAUDE.md` - Update title
-5. **Get the forked repository URL** from GitHub (assumes fork exists)
-6. **Update git remote** to point to the forked repo
-7. **Commit all changes** with proper message
-8. **Push to forked repository** (if user said "then push")
-
-### Required: User Must Fork on GitHub First
-
-**Before running this command, user must:**
-
-1. Go to https://github.com/tcpalm-r/ari-jorge-collab
-2. Click "Fork" button
-3. Name the fork using the normalized name (e.g., "my-project")
-4. Then say "fork and rename to [name], then push"
-
-**AI will automatically:**
-
-- Detect the fork exists at github.com/username/[normalized-name]
-- Update all files with the new name
-- Point git remote to the forked repo
-- Commit and push changes
+1. **Check git status** - ensure working directory is clean
+2. **Normalize the project name** to kebab-case (e.g., "my-project")
+3. **Create title-case version** for display (e.g., "My Project")
+4. **Fork the repository** using `gh repo fork --fork-name [normalized-name]`
+5. **Get GitHub username** from the newly created fork
+6. **Update all project files:**
+   - `package.json` - Update `name` field (kebab-case)
+   - `README.md` - Update title (Title Case) and all GitHub URLs (kebab-case)
+   - `CLAUDE.md` - Update title (Title Case)
+7. **Update git remote** to point to the forked repo automatically
+8. **Commit all changes** with proper message
+9. **Push to forked repository** (if user said "then push")
 
 ### Files Updated Automatically
 
@@ -112,24 +107,24 @@ AI will automatically normalize the project name:
 
 ```json
 {
-  "name": "my-project"
+  "name": "customer-portal"
 }
 ```
 
 **README.md:**
 
 ```markdown
-# My Project
+# Customer Portal
 
-- **GitHub Repo:** https://github.com/username/my-project
-- **GitHub Actions (CI/CD):** https://github.com/username/my-project/actions
-- **Production Site:** https://my-project.vercel.app
+- **GitHub Repo:** https://github.com/username/customer-portal
+- **GitHub Actions (CI/CD):** https://github.com/username/customer-portal/actions
+- **Production Site:** https://customer-portal.vercel.app
 ```
 
 **CLAUDE.md:**
 
 ```markdown
-# My Project
+# Customer Portal
 ```
 
 ### Example Usage
@@ -138,40 +133,51 @@ AI will automatically normalize the project name:
 
 **AI does automatically:**
 
-1. Normalizes name: "Customer Portal" → "customer-portal"
-2. Extracts username from current git remote
-3. Updates package.json: `"name": "customer-portal"`
-4. Updates README.md title and all GitHub URLs
-5. Updates CLAUDE.md title
-6. Updates git remote: `https://github.com/username/customer-portal.git`
-7. Commits: "chore: rename project to customer-portal"
-8. Pushes to forked repo
+1. Checks git status is clean
+2. Normalizes name: "Customer Portal" → "customer-portal" (kebab-case)
+3. Creates title: "Customer Portal" (Title Case)
+4. Runs: `gh repo fork tcpalm-r/ari-jorge-collab --fork-name customer-portal`
+5. Gets username from fork (e.g., "joedoe")
+6. Updates package.json: `"name": "customer-portal"`
+7. Updates README.md title: `# Customer Portal`
+8. Updates all GitHub URLs: `https://github.com/joedoe/customer-portal`
+9. Updates CLAUDE.md title: `# Customer Portal`
+10. Updates git remote: `https://github.com/joedoe/customer-portal.git`
+11. Commits: "chore: fork and rename to customer-portal"
+12. Pushes to forked repo
 
-**Done!** Project is renamed and pushed to the fork.
+**Done!** Repository forked, renamed, and pushed. Zero manual steps.
 
 ### AI Automation Rules
 
 ✅ **AI MUST automatically do:**
 
-- Normalize project name (lowercase, hyphens, no special chars)
-- Extract GitHub username from current remote
-- Update package.json, README.md, CLAUDE.md
-- Update git remote to forked repo URL
+- Check if `gh` CLI is installed and authenticated
+- Normalize project name to kebab-case for URLs/filenames
+- Create Title Case version for display titles
+- Fork using `gh repo fork --fork-name [kebab-case-name]`
+- Extract GitHub username from fork URL
+- Update package.json with kebab-case name
+- Update README.md title with Title Case
+- Update README.md URLs with kebab-case
+- Update CLAUDE.md title with Title Case
+- Update git remote to forked repo
 - Commit changes with proper message
 - Push if user said "then push"
 
 ❌ **AI MUST NEVER do:**
 
 - Edit `.env` or `.env.local` files
-- Create the GitHub fork (user does this via GitHub UI)
 - Push without user saying "then push"
 - Remove workflow documentation from CLAUDE.md
+- Skip the fork step - always fork first
 
-⚠️ **AI should warn if:**
+⚠️ **AI should check and warn if:**
 
+- GitHub CLI (`gh`) is not installed
+- User is not authenticated with `gh auth status`
 - Working directory has uncommitted changes
-- Cannot detect GitHub username from git remote
-- Forked repo doesn't exist on GitHub
+- Fork already exists (may need to delete old fork first)
 
 ---
 
